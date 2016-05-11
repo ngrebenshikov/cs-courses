@@ -1,0 +1,23 @@
+\ProvidesPackage{examination}
+
+\newcommand{\universityname}{Название учебного заведения}
+\newcommand{\departament}{Название факультета}
+\newcommand{\subdepartament}{Название кафедры}
+\newcommand{\chiefsubject}{Шифр специальности}
+\newcommand{\subject}{Предмет}
+\newcommand{\yearofstudy}{Курс}
+
+\newcounter{examination}
+\newcommand{\examinationcaption}{Экзаменационный билет № \arabic{examination}. }
+
+\newenvironment{examination}{%
+\noindent{%
+\footnotesize{\refstepcounter{examination}}
+}%
+\begin{center}
+\textbf{\large{\examinationcaption}}
+\end{center}
+}%
+{%
+}%
+

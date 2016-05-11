@@ -1,0 +1,195 @@
+\section{Построение и анализ алгоритмов}
+
+\subsection{}
+В состязаниях футбольной лиги участвуют шесть команд:
+\begin{itemize}
+	\item Соколы;
+	\item Львы;
+	\item Орлы;
+	\item Бобры;
+	\item Тигры;
+	\item Скунсы.
+\end{itemize}
+Уже сыграны следующие матчи:
+\begin{itemize}
+	\item Соколы - Львы и Орлы;
+	\item Львы - Бобры и Скунсы;
+	\item Тигры - Орлы и Скунсы.
+\end{itemize}
+Каждая команда играет одну игру в неделю. Найдите расписание матчей, чтобы все команды сыграли по одному разу друг с другом в течение минимального количества недель.
+
+\textit{Задание взято из книги ``Структуры данных и алгоритмы''.}
+
+\subsection{Решение рекурсий}
+
+\subsubsection{Основной метод}
+\begin{enumerate}
+	\item $T(n)=2T(n/2) + n^3$
+	\item $T(n)=T(9n/10) + n$
+	\item $T(n)=16T(n/4) + n^2$
+	\item $T(n)=2T(n/4) + \sqrt{n}$
+	\item $T(n)=T(\sqrt{n}) + 1$
+\end{enumerate}
+
+\subsubsection{Дерево рекурсии}
+\begin{enumerate}
+	\item $T(n)=T(n/3) + T(2n/3) + n$
+	\item $T(n)=T(n - a) + T(a) + n, a \geq 1$
+	\item $T(n)=T(\alpha n) + T((1 - \alpha)n) + n, 0 < \alpha < 1$
+	\item $T(n)=T(n-1) + n$
+\end{enumerate}
+
+\textit{Задание взято из книги ``Алгоритмы: построение и анализ''.}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int fact(int n) {
+	if n <= 1 then
+		return (1);
+	else
+		return (n* fact(n-1));
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+void matmpy(int n) {
+	for (int i=0; i<n; i++) {
+		for (int j=0; j<n; j++) {
+			C[i,j] := 0;
+			for (int k=0; k<n; k++) {
+				C[i,j] := C[i,j] + A[i,k]*B[k,j];
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+void mystery(int n) {
+	for (int i=1; i<=n-1; i++)
+		for (int j=i+1; j<=n; j++)
+			for (int k=1; k<=j; k++)
+				A[i] := B[j]+C[k];
+}
+\end{lstlisting}
+Формула суммы арифметической прогрессии: $S_n=\frac{a_1+a_n}{2} \cdot n$
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+void veryodd(int n) {
+	int x, y
+	for (int i=0; i<n; i++) {
+		if (i % 2 = 1) {
+			for (int j=0; j<n; j++)
+				x:=x+1;
+			for (int j=0; j<i; j++)
+				y:=y+1;
+		}
+	}
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int recursive(int n){
+		if (n <= 1) 
+			return (1);
+		else
+			return (
+					recursive(n div 3) + 
+					recursive(n div 3)
+				);
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int recursive(int n){
+		if (n <= 1) 
+			return (1);
+		else
+			return (
+					recursive(n div 2) + 
+					recursive(n div 2) + 
+					recursive(n div 2)
+				);
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int recursive(int n){
+		if (n <= 1) 
+			return (1);
+		else {
+			for (int i=0; i<n; i++) {
+				func(); //вызов функции O(1)
+			}
+			return (
+				recursive(n div 2) + 
+				recursive(n div 2) + 
+				recursive(n div 2)
+				);
+		}
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int recursive(int n){
+		if (n <= 1) 
+			return (1);
+		else {
+			for (int i=0; i<n; i++) {
+				func(); //вызов функции O(n)
+			}
+			return (
+				recursive(n div 2) + 
+				recursive(n div 2) + 
+				recursive(n div 2)
+			);
+		}
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int recursive(int n){
+		if (n <= 1) 
+			return (1);
+		else
+			return (recursive(n-1)+recursive(n-1));
+}
+\end{lstlisting}
+
+\subsection{}
+Найдите время выполнения $T(n)$ в наихудшем случае и определите верхний порядок роста времени выполнения $O(n)$ для следующей программы:
+
+\begin{lstlisting}
+int fib(int n) {
+	if n <= 2 then
+		return (1);
+	else
+		return fib(n-1) + fib(n-2);
+}
+\end{lstlisting}

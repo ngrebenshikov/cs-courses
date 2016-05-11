@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg2" sodipodi:version="0.32" inkscape:version="0.46" sodipodi:docname="ins_sort.svg" inkscape:output_extension="org.inkscape.output.svg.inkscape" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="561.605px"
+	 height="130.305px" viewBox="0 0 561.605 130.305" enable-background="new 0 0 561.605 130.305" xml:space="preserve">
+<defs>
+	
+	
+		<inkscape:perspective  id="perspective10" inkscape:persp3d-origin="372.04724 : 350.78739 : 1" inkscape:vp_z="744.09448 : 526.18109 : 1" inkscape:vp_y="6.1230318e-14 : 1000 : 0" inkscape:vp_x="0 : 526.18109 : 1" sodipodi:type="inkscape:persp3d">
+		</inkscape:perspective>
+</defs>
+<sodipodi:namedview  id="base" inkscape:window-y="-8" inkscape:window-x="-8" inkscape:window-height="1000" inkscape:window-width="1680" inkscape:current-layer="layer1" inkscape:document-units="px" inkscape:pageshadow="2" inkscape:pageopacity="0.0" showgrid="false" objecttolerance="10" guidetolerance="10" gridtolerance="10000" borderopacity="1.0" inkscape:cy="413.34675" bordercolor="#666666" inkscape:cx="349.50084" pagecolor="#ffffff" inkscape:zoom="0.63">
+	</sodipodi:namedview>
+<g id="layer1" transform="translate(1.8952684,-25.766916)" inkscape:groupmode="layer" inkscape:label="Layer 1">
+	<rect id="rect2383" x="52.608" y="68.128" fill="none" stroke="#000000" stroke-width="0.9523" width="506.626" height="44.784"/>
+	<rect id="rect3155" x="289.947" y="68.235" fill="none" stroke="#000000" width="48.148" height="44.444"/>
+	<text transform="matrix(1 0 0 1 312.1694 55.5362)" font-family="'BitstreamVeraSansMono-Roman'" font-size="20">j</text>
+	<path id="path3181" sodipodi:nodetypes="ccccccc" fill="none" stroke="#000000" d="M53.439,117.971c0,0-1.803,2.241,6.879,6.878
+		c9.209,4.92,90.015-0.927,99.471,2.646c12.698,7.937,11.64,11.641,11.64,11.641s2.583-6.162,8.466-9.524
+		c22.223-12.698,85.368,2.717,101.059-4.762c10.582-5.82,8.466-7.407,8.466-7.407"/>
+	<text transform="matrix(1 0 0 1 114.8145 152.8907)" font-family="'MyriadPro-Regular'" font-size="16">отсортировано</text>
+	<path fill="none" d=""/>
+	<path id="path3195" stroke="#000000" d="M182.411,81.648l-2.307-5.166l-1.268,14.505l8.739-11.646L182.411,81.648z"/>
+	<path id="path3187" sodipodi:nodetypes="cc" stroke="#000000" d="M189.131,751.62"/>
+	<path fill="none" d=""/>
+	<path id="path3195_1_" stroke="#000000" d="M299.524,91.516l-4,4l14-4l-14-4L299.524,91.516z"/>
+	<path id="path3967" stroke="#000000" d="M309.524,91.516"/>
+	<path fill="none" d=""/>
+	<path id="path3195_2_" stroke="#000000" d="M266.191,91.516l-4,4l14-4l-14-4L266.191,91.516z"/>
+	<path id="path4484" stroke="#000000" d="M276.191,91.516"/>
+	<path fill="none" d=""/>
+	<path id="path3195_3_" stroke="#000000" d="M233.916,90.986l-4,4l14-4l-14-4L233.916,90.986z"/>
+	<path id="path4486" stroke="#000000" d="M243.916,90.986"/>
+	<path fill="none" d=""/>
+	<path id="path3195_4_" stroke="#000000" d="M200.465,90.986l-4,4l14-4l-14-4L200.465,90.986z"/>
+	<path id="path4488" stroke="#000000" d="M210.465,90.986"/>
+	<path id="path4490" sodipodi:nodetypes="ccccccc" fill="none" stroke="#000000" stroke-width="0.9666" d="M338.588,116.234
+		c0,0-1.682,2.244,6.417,6.889c8.593,4.927,83.981-0.929,92.804,2.649c11.847,7.948,10.859,11.658,10.859,11.658
+		s2.41-6.172,7.898-9.539c20.732-12.718,79.646,2.721,94.284-4.769c9.873-5.829,7.898-7.419,7.898-7.419"/>
+	<text transform="matrix(1 0 0 1 389.938 151.17)" font-family="'MyriadPro-Regular'" font-size="16">неотсортировано</text>
+	<text transform="matrix(1 0 0 1 -1.8369 100.5147)" font-family="'BitstreamVeraSansMono-Roman'" font-size="40">A:</text>
+</g>
+</svg>

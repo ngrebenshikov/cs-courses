@@ -1,0 +1,244 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Параллельные процессы.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Взаимодествие, жесткий параллелизм}, $\alpha P = \alpha Q$
+	
+	$P \ || \ Q$
+	
+	$GRCUST = (toffee \rightarrow GRCUST \ | \ choc \rightarrow GRCUST \ | \ coin \rightarrow toffee \rightarrow GRCUST)$
+	
+	$VMCT = \mu X \bullet (coin \rightarrow (toffee \rightarrow X \ | \ choc \rightarrow X)$
+	
+	$GRCUST \ || \ VMCT = \mu X \bullet (coin \rightarrow choc \rightarrow X)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Протоколы при жестком параллелизме}
+	
+	$traces(P \ || \ Q) = traces(P) \bigcap traces(Q)$
+	
+	$P \ || \ Q / s = (P/s) \ || \ (Q/s)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Параллелизм}, $\alpha P \neq \alpha Q$
+	
+	$\alpha(P \ || \ Q) = \alpha P \bigcup \alpha Q$
+	
+	$NOISYVM = coin \rightarrow click \rightarrow choc \rightarrow clunk \rightarrow NOISYVM$
+	
+	$CUST = coin \rightarrow (toffee \rightarrow CUST \ | \ curse \rightarrow choc \rightarrow CUST)$
+	
+	$NOISYVM \ || \ CUST = \mu X \bullet coin \rightarrow$ \newline 
+	$(click \rightarrow curse \rightarrow choc \rightarrow clunk \rightarrow X$ \newline
+	$| curse \rightarrow clink \rightarrow choc \rightarrow clunk \rightarrow X)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Протоколы параллельных процессов}
+
+	$traces(P \ || \ Q) = \{t \ | \ (t \upharpoonright \alpha P) \in traces(P) \wedge (t \upharpoonright \alpha Q) \in traces(Q) \wedge t \in (\alpha P \bigcup \alpha Q)* \}$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Изображение параллельных процессов}
+
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/concurrent_processes/concurrency1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Изображение параллельных процессов}
+
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/concurrent_processes/concurrency2.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Изображение параллельных процессов}
+
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/concurrent_processes/concurrency3.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы}
+
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{content/concurrent_processes/dining_philosophers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы}
+
+	$\alpha PHIL_i = \{i.sits \: down, i.gets \: up, i.picks \: up \: fork.i, i.picks \: up \: fork.(i \oplus 1),
+		i.puts \: down \: fork.i, i.puts \: down \: fork.(i \oplus 1)\}$
+		
+	$\alpha FORK_i = \{i.picks \: up \: fork.i, (i \ominus 1).picks \: up \: fork.i, i.picks \: down \: fork.i, 
+	(i \ominus 1).picks \: down \: fork.i,\}$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы}
+
+	$PHIL_i = \newline
+	i.sits \: down \rightarrow \newline
+	i.picks \: up \: fork.i \rightarrow \newline
+	i.picks \: up \: fork.(i \oplus 1) \rightarrow \newline
+	i.picks \: down \: fork.i \rightarrow \newline
+	i.picks \: down \: fork.(i \oplus 1) \rightarrow \newline
+	i.gets \: up \rightarrow PHIL_i$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы}
+
+	$FORK_i = i.picks \: up \: fork.i \rightarrow i.picks \: down \: fork.i \rightarrow FORK_i\newline
+	| (i \ominus 1).picks \: up \: fork.i \rightarrow (i \ominus 1).picks \: down \: fork.i \rightarrow FORK_i$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы}
+
+	$PHILOS = PHIL_0 \ || \ PHIL_1 \ || \ PHIL_2 \ || \ PHIL_3 \ || \ PHIL_4$
+
+	$FORKS = FORK_0 \ || \ FORK_1 \ || \ FORK_2 \ || \ FORK_3 \ || \ FORK_4$
+	
+	$COLLEGE = PHILOS \ || \ FORKS$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы: Где проблема? Как решить?}
+
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{content/concurrent_processes/dining_philosophers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обедающие философы: Проблема - тупик, решение - лакей}
+
+	$\displaystyle \alpha FOOT = U \bigcup D, U = \bigcup_{i=0}^4 \{i.gets \: up\}, D = \bigcup_{i=0}^4 \{i.sits \: down\}$
+	
+	$FOOT_0 = (x:D \rightarrow FOOT_1)$
+	$FOOT_j = (x:D \rightarrow FOOT_{j+1} \ | \ y:U \rightarrow FOOT_{j-1})$
+	$FOOT_4 = (y:U \rightarrow FOOT_{3})$
+	
+	$NEWCOLLEGE = COLLEGE \ || \ FOOT_0$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Доказательство отсутствия тупиков}
+	
+	$\forall s \in traces(NEWCOLLEGE) : NEWCOLLEDGE / s \neq STOP$
+	
+	\begin{enumerate}
+		\item Аналитическая проверка на возможность дополнения любого протокола во всех ситуациях, так чтобы он также оказался в множестве протоколов процесса.\newline
+		$seated(s) = \#(s \upharpoonright D) - \#(s \upharpoonright U)$
+		
+		\item Компьютерная программа, которая проверит все протоколы не превоходящие подлине возможное количество состояний системы.\newline
+		Количество соcтояний для обедающих философов - $6^5 \times 3^5 \approx 1.8$ миллиона.\newline
+		Количество протоколов - $> 2^{1.8\times10^6}$
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Другая проблема философов - \textbf{бесконечное владение}
+
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{content/concurrent_processes/dining_philosophers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Изменение символа}
+	
+	$f: \alpha P \rightarrow A$
+	
+	$f(in2p) = in10p, f(in1p) = in5p, f(out1p) = out5p$\newline
+	$f(large) = large, f(small) = small$\newline
+	$NEWVMC = f(VMC)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Изменение символа}
+	
+	$f(out.0) = g(in.0) = mid.0$\newline
+	$f(out.1) = g(in.1) = mid.1$\newline
+	$f(in.0) = in.0, f(in.1) = in.1$\newline
+	$g(out.0) = out.0, g(out.1) = out.1$
+	
+	$CHAIN2 = f(COPYBIT) \ || \ g(COPYBIT)$
+
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{content/concurrent_processes/chain2.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Маркировка процессов}
+	
+	$l : P, f_l(x) = l.x$
+	
+	Пример:
+	
+	$(left: VMS \ || \ right : VMS)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Множественная маркировка процессов}
+	
+	$L : P$
+	
+	Пример:
+	
+	$\alpha LACKEY = \{down, up\}, LACKEY = down \rightarrow up \rightarrow LACKEY$\newline
+	$L = \{0,1,2,3,4\}$\newline
+	$SHARED \: LACKEY = L:LACKEY$
+	
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{content/concurrent_processes/shared_lackey.png}	
+	\end{center}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Hoare, C.A.R., Communicating Sequential Processes, 2004, http://www.usingcsp.com/cspbook.pdf \textbf{pp.45-79}
+	\item Хоар, Ч., Взаимодействующие последовательные процессы- М.: Мир, 1989.
+	\item Roscoe, A.W., The Theory and Practice of Concurrency, 2005, \newline http://web.comlab.ox.ac.uk/oucl/work/bill.roscoe/ \newline publications/68b.pdf.
+\end{itemize}
+\end{slide}

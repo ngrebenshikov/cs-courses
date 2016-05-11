@@ -1,0 +1,75 @@
+\begin{lesson}{Графы}
+
+\setcounter{problem}{0}
+
+В данной работе вам требуется реализовать абстрактный тип данных ``Граф'', алгоритм поиска сильно связанных компонент графа, алгоритм поиска минимального пути от кадой вершины к каждой. Применив разработанный абстрактный тип данных, решите описанную ниже задачу.
+
+\textbf{Пример определения класса для АТД ``Граф''}
+\begin{lstlisting}[emph={NodeInfo, Cleared, Checked, data, checked, group, Graph, addArc, addSingleNode, getNodesCount, dfs, floyd, getMinimalPath, getNodeInfo},emphstyle=\underbar]
+class Graph {
+	public class NodeInfo {
+		public static final int Cleared = 0;
+		public static final int Checked = 1;
+		public int data;
+		public int checked;
+		public int group = 0;
+		
+		public NodeInfo(int data) {
+			this.data = data;
+			checked = Cleared;
+		}
+	}
+	
+	public Graph(int maxNodesCount);
+	public void addArc(int from, int to, int data);
+	public void addSingleNode(int node);
+	public int getNodesCount();
+	public int dfs(Action<Integer> action);
+	public void floyd();
+	public int getMinimalPath(int from, int to);
+	public NodeInfo getNodeInfo(int node);
+}
+\end{lstlisting}
+
+\input labs/analysis_task.tex
+
+\begin{problem}{Дороги}{Стандартный поток ввода}{Стандартный поток вывода}{25 секунд}
+
+Вам  дана карта автомобильных дорог страны ``Икс'', состоящая из $N$ городов и $М$ соединяющих их дорог. Ваша задача состоит в том, чтобы выяснить, возможно ли из каждого города страны ``Икс'' доехать по автодорогам до любого другого. 
+\begin{enumerate}
+	\item Если это возможно, то определите одну из таких пар городов, что минимальный путь между ними будет максимальным среди минимальных путей между любыми двумя вершинами. 
+	\item Если достичь любого города невозможно, то найдите группы городов, для которых это сделать можно. И для каждой группы определите одну из пар вершин с максимальным минимальным путем.
+\end{enumerate}
+
+\InputFile
+
+Во входном файле вам даны целые числа $N (0 < N \leq 10^3)$ и $M (0 \leq{} M \leq 5 \ast 10^5)$. В последующих $M$ строках записаны описания дорог. Каждая дорога описывается тремя целыми числами: $p (1 \leq p \leq N), q (1 \leq q \leq N), r (0 < q < 2^{32})$, где $p$ и $q$ - номера городов, которые соединяет дорога, $r$ - длина дороги.
+
+\OutputFile
+
+В первую строку выходного файла необходимо вывести количество групп городов. На последующих строках вывести номера городов и длину пути. 
+
+\Example
+
+\begin{example}
+\exmp{
+7 8
+1 2 1
+2 3 1
+3 4 1
+4 1 1
+1 5 3
+2 5 2
+3 5 3
+4 5 2
+}{
+3
+1 5 3
+6 6 0
+7 7 0
+}%
+\end{example}
+
+\end{problem}
+
+\end{lesson}

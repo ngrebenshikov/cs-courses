@@ -1,0 +1,463 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Процессы и их протоколы.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Процесс} - это последовательная смена состояний объекта во времени.
+	
+	\textit{Природа объекта:} материальная или идеальная.
+	
+	\textit{Смена состояний:} дискретная или неприрывная.
+	
+	\textit{А также процессы могут быть:} апериодическими, циклическими, конечными, бесконечными, управляемыми, неуправляемыми, линейными, разветвленными.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Процесс} - это выполнение пассивных инструкций компьютерной программы на процессоре ЭВМ.
+	
+	Стандарт ISO 9000:2000 Definitions определяет процесс как \textit{совокупность взаимосвязанных и взаимодействующих действий, преобразующих входящие данные в исходящие}.
+	
+	Часто процесс - это программа и все её элементы: \textit{адресное пространство, глобальные переменные, регистры, стек, открытые файлы и т. д.}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Граф существования процесса}
+
+	\includegraphics[width=1\textwidth]{content/processes/process_graph.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Классификация процессов в операционной системе}
+
+	\includegraphics[width=1\textwidth]{content/processes/process_classification_in_os.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Теория последовательных взаимодействующих процессов Хоара} - математическое описание:
+	
+	\begin{itemize}
+		\item последовательных и параллельных процессов;
+		\item недетерминированности;
+		\item взаимодействия процессов;
+		\item последовательностей процессов;
+		\item разделяемых ресурсов.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Торговый автомат}
+	
+	События:
+	
+	\begin{itemize}
+		\item $coin$ - опустили монету в автомат;
+		\item $choc$ - забрали шоколадку из автомата.
+	\end{itemize}
+	
+	\textbf{Свойства событий}
+
+	\textit{События происходят мгновенно!}
+	
+	\textit{Протяженное событие} есть два события: начало и конец.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Более сложный торговый автомат}
+	
+	События:
+	
+	\begin{itemize}
+		\item $in1p$ - опустили монету в один пенни в автомат;
+		\item $in2p$ - опустили монету в два пенни в автомат;
+		\item $small$ - взяли маленькую упаковку печенья;
+		\item $large$ - взяли большую упаковку печенья;
+		\item $out1p$ - взяли сдачу в один пенни;
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Процесс и его алфавит}
+	
+	\textit{Процесс} - поведение объекта. Записывается заглавными буквами.
+	
+	$VMS$ - простой торговый автомат\newline
+	$VMC$ - сложный торговый автомат
+	
+	\textit{Алфавит процесса} - множество событий. События записываются строчными буквами.
+	
+	$\alpha VMS = \{coin, choc\}$\newline
+	$\alpha VMC = \{in1p, in2p, small, large, out1p\}$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Процесс STOP}
+	
+	$STOP_A$ - процесс с алфавитом $A$, в котором не происходят события.	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Префикс процесса}
+	
+	$(x \rightarrow P)$ (произносится ``P за x'')
+	
+	Обязательно $\alpha (x \rightarrow P) = \alpha P$
+	
+	\includegraphics[width=0.3\textwidth]{content/processes/ctr_field.png}
+	
+	$\alpha CTR = \{up, right\}$\newline
+	$CTR = (right \rightarrow up \rightarrow right \rightarrow right \rightarrow STOP_{\alpha CTR})$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Рекурсивный процесс}
+
+	$\alpha CLOCK = \{tick\}$	\newline
+	$CLOCK = (tick \rightarrow CLOCK)$
+	
+	$CLOCK$\newline
+	$= (tick \rightarrow CLOCK)$\newline
+	$= (tick \rightarrow tick \rightarrow CLOCK)$
+	
+	$tick \rightarrow tick \rightarrow tick \rightarrow \ldots$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Рекурсивный процесс}
+
+	$X=F(X)$
+	
+	Описание процесса является \textbf{защищенным} если оно начинаяется с префикса, и в заданном алфавите $A$ выражение $X=F(X)$ имеет единственное решение. Обозначение:\newline
+	$\mu X : A \bullet F(X)$
+	
+	$X$ - локальная переменная $\Rightarrow \mu X : A \bullet F(X) = \mu Y : A \bullet F(Y)$
+	
+	Пример: 
+	
+	$CLOCK = \mu X : \{tick\} \bullet (tick \rightarrow X)$\newline
+	$VMS = \mu X : \{coin,choc\} \bullet (coin \rightarrow (choc \rightarrow X))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выбор}
+	
+	$(x \rightarrow P \ | \ y \rightarrow Q)$
+	
+	$\alpha(x \rightarrow P \ | \ y \rightarrow Q) = \alpha P, \{x,y\} \subseteq \alpha P, \alpha P = \alpha Q$
+	
+	Пример:
+	
+	$VMCT = \mu X \bullet coin \rightarrow (choc \rightarrow X \ | \ toffee \rightarrow X)$
+	
+	$COPYBIT = \mu X \bullet (in.0 \rightarrow out.0 \rightarrow X \ | \ in.1 \rightarrow out.1 \rightarrow X)$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выбор}
+	
+	$(x \rightarrow P \ | \ y \rightarrow Q \ | \ldots \ | \ z \rightarrow Z)$
+	
+	$(x:B \rightarrow P(x))$, $B$ - множество событий. 
+	
+	Пример:
+	
+	$(a \rightarrow P \ | \ b \rightarrow Q) = (x:\{a,b\} \rightarrow R(x))$, где $R(x) = $ если $x=a$ то $P$ иначе $Q$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Взаимная рекурсия}
+	
+	$\alpha DD = \alpha O = \alpha L = \{setorange, setlemon, lemon, orange\}$ \newline
+	$DD = (setorange \rightarrow O | setlemon \rightarrow L)$ \newline
+	$O = (orange \rightarrow O \ | \ setlemon \rightarrow L \ | \ setorange \rightarrow O)$ \newline
+	$L = (lemon \rightarrow L \ | \ setlemon \rightarrow L \ | \ setorange \rightarrow O)$ \newline
+
+	$CT_0 = (up \rightarrow CT_1 | around \rightarrow CT_0)$ \newline
+	$CT_{n+1} = (up \rightarrow CT_{n+2} | down \rightarrow CT_n), n \in [0,+\infty)$\newline
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Изображение процессов}
+
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/processes/pic-simple1.png}
+	\end{center}
+\end{slide}
+
+\begin{slide}
+	\textbf{Изображение процессов}
+	
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{content/processes/pic-infinite.png}
+	\end{center}
+\end{slide}
+
+\begin{slide}
+	\textbf{Протоколы}
+
+	$<x,y>$	- два события - за $x$ следует $y$. \newline
+	$<x>$	 - одно событие $x$. \newline
+	$<>$	- ничего не произошло. \newline
+	
+	Пример:
+	
+	$<coin, choc, coin, choc>$ \newline
+	$<coin, choc, coin>$ \newline
+	
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Конктенация}
+
+	$s \ \widehat{} \ t$
+	
+	$<coin, choc> \ \widehat{} \ <coin, toffee> = <coin, choc, coin, tofee>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Сужение}
+	
+	Выражение $(t \upharpoonright A)$ обозначает протокол $t$, суженный на множество символов $A$; он строится из $t$
+	отбрасыванием всех символов, не принадлежащих $A$.
+
+	$<around, up, down, arround> \upharpoonright <up, down> = <up, down>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Голова и хвост}
+
+	Если $s$ – непустая последовательность, обозначим ее первый элемент $s_0$, а результат, полученный
+	после его удаления,– $s’$.
+	
+	$<x,y,z>_0 = x$
+	
+	$<x,y,z>' = <y,z>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Звездочка}
+
+	Множество $A^*$ – это набор всех конечных протоколов (включая $<>$), составленных из элементов
+	множества $A$. После сужения на $A$ такие протоколы остаются неизменными.
+	
+	$A^* = \{s \ | \ s \upharpoonright A = s\}$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Порядок}
+
+	Если $s$ – копия некоторого начального отрезка $t$, то можно найти такое продолжение $u$
+	последовательности $s$, что $s \ \widehat{} \ u = t$.
+	
+	$s \leq t = (\exists u \bullet s \ \widehat{} \ u = t)$ - $s$ есть префикс $t$.
+	
+	$<x,y> \leq <x,y,x,w>$
+	
+	$<x,y> \leq <z,y,x> \equiv x = z$
+
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Длина}
+
+	$\#<x,y,z> = 3$
+
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Протоколы процессов}
+
+	$traces(STOP) = {<>}$
+
+	$traces(coin \rightarrow STOP) = {<>, <coin>}$
+
+	$traces(\mu X \bullet tick \rightarrow X) = \{<>, <tick>, <tick, tick>, \ldots\} = {tick}^*$
+
+	$traces(\mu X \bullet coin \rightarrow choc \rightarrow X) = \{s \ | \ \exists n \bullet s \leq <coin, choc>^n\}$
+\end{slide}
+
+\begin{slide}
+	\textbf{Процесс после выполнения протокола}
+	
+	Если $s \in traces(P)$ то 
+	
+	$P / s$, ($P$ после $s$)
+	
+	это процесс, ведущий себя так, как ведет себя $Р$ с момента завершения всех действий, записанных в
+	протоколе $s$. Если $s$ не является протоколом $Р$, то $(P / s)$ не определено.
+
+	$(VMS / <coin>) = (choc \rightarrow VMS)$
+
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+
+\begin{slide}
+	\textbf{Операции над протоколами. Замена символа.}
+
+	Пусть $f$ – функция, отображающая символы из множества $A$ в множество $В$. С помощью $f$ можно
+	построить новую функцию $f^*$, отображающую последовательность символов из $А^*$ в последовательность
+	символов из $В^*$, путем применения $f$ к каждому элементу последовательности. Например, если $double$
+	– функция, удваивающая свой целый аргумент, то
+
+	$double^*(<1, 5, 3, 1>) = <2, 10, 6, 2>$
+
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Сцепление.}
+
+	Пусть $s$ – последовательность, каждый элемент которой в свою очередь является
+	последовательностью. Тогда $\widehat{}/s$ получается из $s$ конкатенацией всех ее элементов в их исходном
+	порядке, например:
+	
+	$\widehat{}/<<1,3>,<>,<7>> = <1,3> \ \widehat{} \ <> \ \widehat{} \ <7> = <1,3,7>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Чередование.}
+
+	Последовательность $s$ является чередованием последовательностей $t$ и $u$, если ее можно разбить на
+серию подпоследовательностей, которые, чередуясь, представляют собой подпоследовательности из $t$ и
+$u$. Например,
+
+	$s = <1, 6, 3, 1, 5, 4, 2, 7>$ является чередованием $t$ и $u$, где $t = <1, 6, 5, 2, 7>$, а $u = <3, 1, 4>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Индекс.}
+
+	$s[i], 0 \leq i \#s$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Обратный порядок.}
+
+	$\overline{<3, 5, 37>} = <37,5,3>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Операции над протоколами. Выборка.}
+
+	$s \downarrow a$
+
+	Если $s = <a.7, b.9, a.8, c.0 >$, то $s \downarrow a = <7, 8>$, a $s \downarrow d = <>$.
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+
+\begin{slide}
+	\textbf{Операции над протоколами. Композиция.}
+
+	$\tick$	- успешное завершение протокола.
+	
+	$t$ - протокол, отражающий последовательность с того момента, как $s$ успешно завершится.
+	
+	$(s;t)$ - композиция. Если в с отсутствует $\tick$, то $t$ не может начаться.
+	
+	$(<a,b,c,\tick,d>; <x,y,z>) = <a,b,c,x,y,z>$
+
+	$(<a,b,c,d>; <x,y,z>) = <a,b,c,d>$
+	
+	\textit{Свойства операции смотрите в книге Hoar, Communicating Sequential Processes.}
+\end{slide}
+
+\begin{slide}
+	\textbf{Спецификация} изделия – это описание его предполагаемого поведения. Оно представляет
+собой предикат, содержащий свободные переменные, каждая из которых соответствует некоторому
+обозримому аспекту поведения изделия.
+
+	$AMP10 = (0 \leq v \leq 1 \Rightarrow |v' - 10v| \leq 1)$ - спецификация усилителя, где $v$ - входное напряжение, $v'$ - выходное.
+	
+	$NOLOSS = (\#(tr \upharpoonright \{choc\}) \leq \#(tr \upharpoonright \{coin\}))$
+	
+	Далее $tr \downarrow c = \#(tr \upharpoonright \{c\})$.
+	
+	$FAIR1 = (tr \downarrow coin) \leq (tr \downarrow choc) + 1$
+	
+	$VMSPEC = NOLOSS \wedge FAIR1 = \newline 0 \leq ((tr \downarrow coin) - (tr \downarrow choc)) \leq 1$
+
+\end{slide}
+
+\begin{slide}
+	\textbf{Удовлетворение спецификации}
+	
+	$P \ sat \ S \equiv \forall tr \bullet tr \in traces(P) \Rightarrow S$ 
+
+\end{slide}
+
+\begin{slide}
+	\textbf{Пример доказательства}
+	
+	Докажем, что $VMS \ sat \ VMSSPEC$
+	
+	1. Базис индукции. $STOP sat tr = \left\langle\right\rangle \Rightarrow 0 \leq ((tr \downarrow coin) - (tr \downarrow choc)) \leq 1$
+	
+	2. Посылка индукции. $X \ sat \ VMSPEC$
+	
+	3. Индукционный переход. 
+	
+	$coin \rightarrow choc \rightarrow X$
+	
+	$sat \ (tr \leq \left\langle coin,choc\right\rangle) \vee (tr \geq \left\langle coin, choc\right\rangle \wedge 0 \leq ((tr'' \downarrow coin) - (tr'' \downarrow choc)) \leq 1)$
+	
+	$\Rightarrow 0 \leq ((tr \downarrow coin) - (tr \downarrow choc)) \leq 1$, так как
+	
+	\begin{enumerate}
+		\item $\left\langle \right\rangle \downarrow coin = \left\langle \right\rangle \downarrow choc = <coin> \downarrow choc = 0$
+		\item $\left\langle coin\right\rangle \downarrow coin = \left\langle coin,choc\right\rangle \downarrow coin = \left\langle coin,choc\right\rangle \downarrow choc = 1$
+		\item $tr \geq \left\langle coin,choc\right\rangle \Rightarrow (tr \downarrow coin = tr'' \downarrow coin +1 \wedge tr \downarrow choc = tr'' \downarrow choc +1)$
+	\end{enumerate}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Hoare, C.A.R., Communicating Sequential Processes, 2004, http://www.usingcsp.com/cspbook.pdf \textbf{pp.1-44}
+	\item Хоар, Ч., Взаимодействующие последовательные процессы- М.: Мир, 1989.
+	\item Roscoe, A.W., The Theory and Practice of Concurrency, 2005, \newline http://web.comlab.ox.ac.uk/oucl/work/bill.roscoe/ \newline publications/68b.pdf.
+\end{itemize}
+\end{slide}

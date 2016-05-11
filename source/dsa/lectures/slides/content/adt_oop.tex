@@ -1,0 +1,300 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Абстрактные типы данных}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Основные понятия}
+
+	\begin{itemize}
+		\item Тип данных
+		\item Структура данных 
+		\item Абстрактный тип данных
+		\item Класс
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Тип данных переменной} - множество значений, которые может принимать эта переменная.
+	
+	
+	Java-код:
+	\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+	int a = 5;
+	double b = 0.5;
+	string c = ``abc'';
+	boolean d = true;
+	\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Структура данных} - набор переменных, возможно, различных типов данных, объединенных определенным образом.
+	Структура данных создается путем задания имени совокупности (или агрегату) ячеек.
+	
+	\textbf{Ячейка} является базовым блоком структуры данных, которая предназначена для хранения значения определенного 
+	базового или составного типа.
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Фундаментальные структуры данных}
+	\begin{itemize}
+		\item Массив
+		\item Запись 
+		\item Файл
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Массив} - последовательность ячеек определенного типа.
+	
+	Код на Java:
+	\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+	int a[] = new int[5];
+	boolean d[] = new boolean[5];
+	\end{lstlisting}
+
+	\textbf{d:}\newline
+	\begin{tabular}[t]{|l|l|l|l|l|}
+			\hline 1 & 2 & 3 & 4 & 5 \\
+			\hline true & false & true & true & false \\ \hline
+	\end{tabular}
+
+	\textbf{d[3] = false}\newline
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Запись} - это ячейка, состоящая из нескольких ячеек (полей), значение которых могут быть разных типов.
+
+	Код на C++:
+	\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+	struct Student {
+		string name;
+		string lastName;
+		int yearOfEntrance;
+	}
+	struct Student s; 
+	s.name=''Иван''; s.lastName=''Петров'';
+	s.yearOfEntrance=2009;
+	\end{lstlisting}
+
+	\textbf{s:}\newline
+	\begin{tabular}[t]{|l|l|l|l|}
+			\hline name & lastName & yearOfEntrance \\
+			\hline Иван & Петров & 2009\\ \hline
+	\end{tabular}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Файл(Поток)} - это последовательность значений определенного типа, доступ к которой осуществляется последовательным способом.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Указатель} - ячейка, чьё значение указывает на другую ячейку, то есть содержит адрес другой ячейки в памяти.
+
+	\textbf{Курсор} - ячейка с целочисленным значением, используемая для указания на ячейку массива.
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Код на C++:
+	\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+	struct S1 { int cursor; struct S1 * pointer; }
+	struct S2 {	double data; int cursor;	}
+	\end{lstlisting}
+
+	\includegraphics[width=0.7\textwidth]{content/adt_oop_imgs/sd.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Абстрактный тип данных (АТД)} - математическая модель с совокупностью операторов, определенных в рамках этой модели.
+
+	Например, АТД ``Множество'' имеет операторы:
+	\begin{itemize}
+		\item объединение;
+		\item пересечение; 
+		\item разность и другие.
+	\end{itemize}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Реализация АТД на языке программирования} подразумевает:
+
+	\begin{itemize}
+		\item описание АТД с помощью операторов языка программирования;
+		\item определение переменных; 
+		\item написание процедуры для каждого из операторов АТД.
+	\end{itemize}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Структурный подход}
+	\begin{itemize}
+		\item данные описываются структурами данных;
+		\item операторы АТД реализуются с помощью функций и процедур. 
+	\end{itemize}
+	
+	Код на C++:
+\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+//определение структуры данных
+struct IntSet { int elements[100]; }
+//определение оператора объединения
+void union(struct IntSet * s1, struct IntSet * s2);
+//определение оператора пересечения
+void  intersect(struct IntSet * s1, struct IntSet * s2); 
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Объектный подход}
+
+	Данные и операторы объединяются в объект!
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Объект}: некоторая сущность в виртуальном пространстве, обладающая определённым состоянием и поведением, имеет заданные атрибуты и операции над ними.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Класс} определяет скрытую внутреннюю структуру некоторого значения, а также набор операций, применимых к данному значению. 
+	\begin{itemize}
+		\item данные описываются полями класса;
+		\item операторы АТД реализуются с помощью методов класса. 
+	\end{itemize}
+	
+	\textbf{Экземпляр класса есть объект!}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Объектный подход}
+	
+	Код на Java:
+	\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+	class IntSet {
+		public int elements[];
+		public void union(IntSet s);
+		public void intersect(IntSet s);
+	}
+	\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Необходимое нам из ООП}
+	
+	\begin{itemize}
+		\item конструктор;
+		\item интерфейс; 
+		\item инкапсуляция;
+		\item шаблон; 
+	\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Конструктор}
+
+	\begin{lstlisting}[frame=single,emph={extends, implements, class, interface,int, double, string, boolean},emphstyle=\underbar]
+	class IntSet {
+		public int elements[];
+		public IntSet(int els[]) {
+			elements = els;
+		}
+		...
+	}
+	int a[] = new int[10];
+	IntSet set = new IntSet(a);
+	\end{lstlisting}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Интерфейс}
+
+	\begin{lstlisting}[frame=single,emph={implements, class, interface, int, double, string, boolean},emphstyle=\underbar]
+	interface Set {
+		void union(Set s);
+		void intersect(Set s);
+	}
+	class IntSet implements Set {
+		public int elements[];
+		public IntSet(int els[]) {
+			elements = els;
+		}
+		public void union(Set s) { ... }
+		public void intersect(Set s) { ...}
+		...
+	}
+	\end{lstlisting}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Инкапсуляция}
+
+	\begin{lstlisting}[frame=single,emph={extends, implements, class, interface, int, double, string, boolean},emphstyle=\underbar]
+	class IntSet {
+		private int elements[];
+		private void someFunction() { ... }
+		public union(IntSet s) { ... }
+		...
+	}
+	\end{lstlisting}
+	
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Шаблон}
+
+\begin{lstlisting}[frame=single,emph={int, double, string, boolean},emphstyle=\underbar]
+class TemplatedSet<T> {
+	private T elements[];
+	public IntSet(T els[]) {
+		elements = els;
+	}
+	...
+}
+
+Integer a[] = new Integer[10];
+TemplatedSet<Integer> set = new TemplatedSet<Integer>(a);
+\end{lstlisting}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.23-28}.
+	\item Бьерн Страуструп. Язык программирования С++. Специальное издание. - СПб. : Бином, Невский диалект, 2008.
+	\item Java SE Documentation. \newline http://java.sun.com/javase/reference/api.jsp
+\end{itemize}
+\end{slide}

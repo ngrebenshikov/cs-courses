@@ -1,0 +1,262 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Последовательности процессов. Совместное использование ресурсов несколькими процессами.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Завершение процесса}
+	
+	$\STOP$ - завершение.
+	
+	Успешное завершение - $\tick$.
+	
+	$(x:B \then P(x))$ - неверно, если $\tick \in B$
+	
+	$SKIP_A$ - процесс, который ничего не делает, а завершается успешно.
+	
+	$\alpha SKIP_A = A \bigcup \{\tick\}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Последовательность процессов}
+
+	$P;Q$
+	
+	$VMONE = (coin \then (choc \then \SKIP \barchoice toffee \then SKIP))$	
+	
+	$VMTWO = VMONE;VMONE$	
+	
+	$VMCT = ^*VMONE$	
+	
+	$^*P = \mu X \spot (P;X), \alpha (^*P) = \alpha P - \{\tick\}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример последовательности процессов}
+
+	$\alpha PIDGINGOL = \{a, the, cat, dog, bites, scratches\}$
+	
+	$PIDGINGOL = NOUNCLAUSE ; PREDICATE$
+
+	$PREDICATE = VERB ; NOUNCLAUSE$
+	
+	$VERB = (bites \then SKIP \barchoice scratches \then SKIP)$
+	
+	$NOUNCLAUSE = ARTICLE ; NOUN$
+
+	$ARTICLE = (a \then SKIP \barchoice the \then SKIP)$
+
+	$NOUN = (cat \then SKIP \barchoice dog \then SKIP)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример последовательности процессов}
+
+	$A^nBC^n = \mu X \spot (b \then SKIP \barchoice a \then (X ; (c \then SKIP)))$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Прерывания}
+
+	$P \Delta Q$
+	
+	$\alpha(P \Delta Q) = \alpha P \bigcup \alpha Q$
+	
+	$\traces(P \Delta Q) = \{s \roundcat t | s \in \traces(P) \land t \in \traces(Q)\}$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Прерывание катастрофой}
+
+	$\swarrow \notin \alpha P$
+	
+	$P \hat{\swarrow} Q = P \Delta (\swarrow \then Q)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Перезапуск}
+
+	$\hat{P} = \mu X \spot (P \hat \swarrow X)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Совместное использование ресурсов}
+
+	$(m : R \enslave S)$
+	
+	$R$  - ресурс для $S$
+
+	Представим, что $S = (P \parallel Q)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Разделение посредство перемешивания}
+
+	$R = (d:D \enslave (P \interleave Q)$ \newline
+	$D = ?x \then !(x + x) \then D$ \newline
+	$P = d!3 \then d?y \then P(y)$ \
+	$Q = d!4 \then d?z \then Q(z)$
+	
+	$P \interleave Q = d!3 \then ((d?y \then P(y)) \interleave Q) \extchoice d!4 \then (P \interleave (d?z \then Q(z)))$
+	
+	$(d:D \enslave (P \interleave Q) = (d:D \enslave (P(8) \interleave Q) \intchoice (d:D \enslave (P \interleave Q(8))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. Совместное использование принтера}
+
+	$LP = acquire \then \mu X \spot (left?x \then h!s \then X \barchoice release \then LP)$
+	
+	$lp.acquire \then \ldots  lp.left!''A.JONES'' \then \ldots \newline
+	lp.left!nextline \then \ldots lp.release \then \ldots$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анна и Мария на кухне}
+
+	$UTENSIL = (acquire \then use \then use \then \ldots \then release \then UTENSIL)$
+	
+	$pot:UTENSIL \enslave pan:UTENSIL \enslave (ANN \interleave MARY)$
+	
+	$ANN = \ldots pot.acquire \then \ldots pan.acquire \then \ldots$
+	
+	$MARY = \ldots pan.acquire \then \ldots pot.acquire \then \ldots$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анна и Мария на кухне $\Rightarrow$ возможен тупик}
+
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{content/shared_resources/ann_and_mary.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема при разделении хранилища}
+
+	$(count : VAR \enslave (count.left!0 \then (P \interleave Q)))$
+	
+	$count.right?x \then count.right?y \then \newline
+	count.left!(y+1) \then count.left!(x+1) \then \ldots$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Семафор Дейкстры}
+
+	$SEM = (P \then V \then SEM)$
+	
+	$(mutex : SEM \enslave \ldots)$
+	
+	Получаем:
+	
+	$mutex.P \then count.right?x \then count.left!(x+1) \then mutex.V \then \ldots$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Атомарные события (операции)}
+	
+	$count.up$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Множество ресурсов}
+
+	$\parallel_{i<12}P_i = (P_0 \parallel P_1 \parallel \ldots \parallel P_{11})$	
+
+	$\parallel_{i<4}P = (P \parallel P \parallel P \parallel P)$	
+
+	$\parallel_{i \geq 0}P_i = (P_0 \parallel P_1 \parallel \ldots)$	
+	
+	$\extchoice_{i \geq 0}(f(i) \then P_i) = (f(0) \then P_0 \barchoice f(1) \then P_1 \then \ldots)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Запоминающее устройство}
+
+	$BSTORE = \parallel_{i<B} i : COPY$
+	
+	$(back: BSTORE \enslave \ldots back.i.left?bl \then \ldots back.i.right?y \then \ldots)$
+	
+	$\extchoice_{i < B}(back.i.left!bl \then \ldots)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Брошенный файл}
+
+	$myfile:SCRATCH \enslave \ldots myfile.left!v \ldots myfile.rewind \ldots$
+	
+	$\ldots (myfile.right?x \then \ldots$
+	
+	$\barchoice myfile.empty \then \ldots$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Брошенный файлы во внешней памяти}
+	
+	$SCRATCHB = back:BSTORE \enslave BSCRATCH$
+	
+	$BSCRATCH = (pagetable:SCRATCH \enslave$
+	
+	$\mu X \spot (left?x \then (\extchoice_{i<B}back.i.left!x \then pagetable.left!i \then X)$
+	
+	$\barchoice rewind \then pagetable.rewind \then$
+	
+	$\mu Y \spot (pagetbale.right?i \then back.i.right?x \then right!x \then Y$
+	
+	$\ \ \ \ \barchoice page table.empty \then empty \then Y)))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Составное запоминающее устройство}
+
+	$FILESYS = \Nats:(back:BSTORE) \enslave (\parallel_{i \geq 0}i:SHBSCR)$
+	
+	$filesys:FILESYS \enslave (\ldots \interleave USER1 \interleave USER2 \interleave \ldots)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Составное запоминающее устройство}
+
+	\begin{center}
+		\includegraphics[height=0.5\textwidth]{content/shared_resources/store.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Hoare, C.A.R., Communicating Sequential Processes, 2004, http://www.usingcsp.com/cspbook.pdf \textbf{pp.153-198}
+	\item Хоар, Ч., Взаимодействующие последовательные процессы- М.: Мир, 1989.
+	\item Roscoe, A.W., The Theory and Practice of Concurrency, 2005, \newline http://web.comlab.ox.ac.uk/oucl/work/bill.roscoe/ \newline publications/68b.pdf.
+\end{itemize}
+\end{slide}

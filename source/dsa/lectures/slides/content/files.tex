@@ -1,0 +1,294 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Работа с внешней памятью (файлами).}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Модель внешних вычислений}
+	\begin{itemize}
+		\item Внешняя память разделяется на блоки - страницы.
+		\item Время доступа к внешней памяти. ОЗУ на 5 порядков быстрее.
+		\item Буфер в основной памяти.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обработка файлов}
+	\begin{itemize}
+		\item Внешняя сортировка
+		\item Хранение данных ориентированное на поиск
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка слиянием}
+	
+	\textbf{Идея:} организовать файл в виде постепенно унивеличивающихся \textit{серий}.
+	
+	Серия - $\left\langle r_1, \ldots, r_k\right\rangle$, где $r_i \leq r_{i+1}, 1 \leq i \leq k$
+	
+	Файл $\left\langle r_1, \ldots, r_m\right\rangle$ делится на серии длинной $k$, 
+	если для $i \geq 0$, таких что $k \cdot i \leq m \Rightarrow \left\langle r_{k(i-1)+1}, r_{k(i-1)+2}, \ldots, r_{k\cdot i}\right\rangle$ является серией
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Файл с сериями длинной 3}
+	
+	\begin{tabular}[t]{| c | c | c | c |}
+		\hline 
+		2 5 7 & 78 98 101 & 2 3 4 & 3 67 \\ 
+		\hline
+	\end{tabular}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Работа сортировки слиянием}
+
+	\includegraphics[width=0.9\textwidth]{content/files/merge_sort_example.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\begin{codebox}
+	\Procname{$\proc{merge}(F1, F2, G1, G2, k)$}
+	\li $outswitch \gets true$ \Comment первая серия идет в G1
+	\li \While $\kw{not} \; \proc{eof}(F1) \; \kw{or} \; \kw{not} \; \proc{eof}(F2)$
+	\li \Do $used[1] \gets 0; used[2] \gets 0; fin[1] \gets false; fin[2] \gets false;$
+	\li $cur[1] \gets \proc{get}(1, f1, f2); cur[2] \gets \proc{get}(2, f1, f2);$
+	\li 	\While $\kw{not} \; fin[1] \; \kw{or} \; \kw{not} \; fin[2]$
+	\li 	\Do \If $fin[1]$ 
+	\li		\Then $winner \gets 2$ \End
+	\li		\Else \If $fin[2]$ 
+	\li			\Then $winner \gets 1$ \End
+	\li		\Else \If $cur[1].key < cur[2].key$
+	\li			\Then $winner \gets 1$ \Else $winner \gets 2$ \End
+	\li		\If $outswitch$
+	\li		\Then $\proc{write}(g1, cur[winner])$
+	\li		\Else $\proc{write}(g2, cur[winner])$
+	\li		$cur[winner] = \proc{getRecord}(winner)$ \End
+	\li $outswitch = \kw{not} \; outswitch$ \End \End
+	\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{codebox}
+\Procname{$\proc{merge-sort}(F, N)$}
+\li $k \gets 1; switch \gets 0$
+\li \While $k < 2 \cdot N$
+\li \Do \If $switch = 0$
+\li 	\Then	$F1 \gets F[0,0]; F2 \gets F[0,1];$ \li $G1 \gets F[1,0]; G2 \gets F[1,1];$
+\li		\Else	$F1 \gets F[1,0]; F2 \gets F[1,1];$ \li $G1 \gets F[0,0]; G2 \gets F[0,1];$ \End
+\li	$\proc{merge}(F1, F2, G1, G2, k)$
+\li $k \gets k \cdot 2$
+\End
+\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ сортировки слиянием}
+	
+	$C(N) = M(N)$
+	
+	$T_{merge}(N) = \Theta(N)$
+
+	$T_{merge-sort}(N) = \Theta(N) \cdot \Theta(logN) = \Theta(N \cdot logN)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{На семинар}
+	
+	\begin{itemize}
+		\item Многоканальное слияние
+		\item Многофазное слияние
+		\item Использование буферов при слиянии. Схемы с 6-ю и с 4-мя буферами.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Хранение данных}
+	
+	\begin{itemize}
+		\item Простой файл
+		\item Хэшированный файл
+		\item Индексированный файл:
+			\begin{itemize}
+				\item разреженный индекс для отсортированного файла
+				\item плотный индекс для неотсортированного файла
+				\item вторичный индекс
+				\item деревья поиска
+			\end{itemize}
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{B-дерево} - сбалансироанное дерево поиска, созданное специально для 
+	эффективной работы с вторичной памятью с непосредственный доступом (например, дисковой памятью).
+	
+	При анализе будем рассматривать:
+	
+	\begin{itemize}
+		\item количество обращений к диску
+		\item время вычислений
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{B-дерево}
+
+	\includegraphics[width=1\textwidth]{content/files/btree.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{B-дерево} $T$ есть дерево с корнем $root[T]$, обладающее следующими свойствами:
+\begin{itemize}
+	\item Каждый узел $x$ содержит поля: 
+			$n[x]$ - количество ключей в узле в настоящий момент; 
+			$\left\langle key_1[x] \leq \ldots \leq key_{n[x]}[x]\right\rangle$;
+			логическое значение $leaf[x]$ равное $true$, если $x$ - лист.
+	\item $\left\langle c_1[x],c_2[x],\ldots,c_{n[x]+1}[x]\right\rangleна$ указатели на дочерние узлы.
+	\item все листья расположены на одной глубине $h$.
+	\item $t \geq 2$ - минимальная степень B-дерева. Для всех внутренних узлов кроме корневого $n[x] \geq t-1$. Для всех внутренних узлов $n[x] \leq 2t-1$
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Высота B-дерева} $T$ с $n \geq 1$ узлами и минимальной стпенью $t \geq 2$ не превышает $log_t(n+1)/2$.
+	
+	$\displaystyle n \geq 1 + (t-1)\sum_{i=1}^{h}{2t^{i-1}}=1 + 2(t-1)\left(\frac{t^h-1}{t-1}\right)=2t^h-1 \Rightarrow$
+
+	$t^h \geq (n+1)/2 \Rightarrow$
+
+	$h \geq log_t(n+1)/2$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Поиск по B-дереву}
+	
+	\begin{codebox}
+	\Procname{$\proc{B\_Tree\_Search}(x, k)$}
+	\li $i \gets 1$
+	\li \While $i \leq n[x]$ и $k > key_i[x]$
+	\li \Do $i \gets i + 1$ \End
+	\li	\If $i \leq n[x]$ и $k = key_i[x]$
+	\li \Then $\Return (x, i)$ \End
+	\li	\If $leaf[x]$
+	\li \Then $\Return NIL$
+	\li \Else $\proc{Disk\_Read}(c_i[x])$
+	\li \Return $\proc{B\_Tree\_Search}(c_i[x],k)$
+	\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ времени поиска}
+
+	Количество обращений к диску равно $O(h) = O(log_tn)$
+	
+	Время обработки: $n[x] < 2t \Rightarrow T(n) = O(th) = O(t \cdot log_tn)$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Создание пустого B-дерева}
+
+	\begin{codebox}
+	\Procname{$\proc{B\_Tree\_Create}(T)$}
+	\li $x \gets \proc{Allocate\_Node()}$
+	\li $leaf[x] \gets true$
+	\li $n[x] \gets 0$
+	\li	$\proc{Disk\_Write(x)}$
+	\li $root[T] \gets x$
+	\end{codebox}
+	
+	$OP_{disk} = O(1)$ и $T(n) = O(1)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Вставка ключа в B-дерево}
+
+	\includegraphics[width=1\textwidth]{content/files/btree_insert.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Разбиение узла в B-дереве}
+
+	\includegraphics[width=1\textwidth]{content/files/btree_split.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Разбиение корня в B-дереве}
+
+	\includegraphics[width=1\textwidth]{content/files/btree_split_root.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Разбиение узла в B-дереве}
+
+	\includegraphics[width=0.35\textwidth]{content/files/btree_split_child_lst.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Вставка в B-дерево}
+
+	\includegraphics[width=0.6\textwidth]{content/files/btree_insert_lst.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Вставка в B-дерево}
+
+	\includegraphics[width=0.5\textwidth]{content/files/btree_insert_notfull_lst.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ вставки в B-дерево}
+	
+	Разбиение: $OP_{disk} = O(1)$ и $T(n) = O(t)$
+
+	Вставка: $OP_{disk} = O(h) = O(log_tn)$ и $T(n) = O(th) = O(t \cdot log_tn)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{На семинар}
+	
+	\begin{itemize}
+		\item Удаление из B-дерева.
+		\item B+ деревья.
+		\item Применение B-деревьев в файловых системах.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.311-338}.
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.515-536}.
+	\item http://en.wikipedia.org/wiki/B-tree
+	\item http://en.wikipedia.org/wiki/B\%2B\_tree
+\end{itemize}
+\end{slide}
+

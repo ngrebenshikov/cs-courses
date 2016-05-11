@@ -1,0 +1,349 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Деревья}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево} - конечное множество $T$ одного или более узлов со следующими свойствами:
+	
+	\begin{enumerate}
+		\item $\exists$ один выделенный узел, а именно - корень данного дерева $T$.
+		\item остальные узлы распределены среди $m \geq 0$ непересекающихся множеств $T_1, \ldots , T_m$, 
+			и каждое из этих множеств является деревом (деревья $T_1, \ldots , T_m$ называются поддеревьями).
+	\end{enumerate}
+
+	\textbf{Дерево} - ориентированный, ацикличный, связный граф.
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Дерево используется для представления иерархических связей типа ``Один ко многим''.
+
+	Что можно представить в виде дерева?
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Способы изображения}
+	
+	$\left\{A, \left\{B, \left\{H\right\}, \left\{J\right\}\right\}, \left\{C, \left\{D\right\}, \left\{E, \left\{G\right\}\right\}, \left\{F\right\}\right\}\right\}$
+
+	\includegraphics[width=1\textwidth]{content/trees/graphic2.pdf}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Способы изображения}
+	
+	$a - b * (c / d + e / f)$
+
+	\includegraphics[width=0.5\textwidth]{content/trees/graphic1.pdf}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Нотация}
+	
+\begin{center}
+	\begin{tabular*}{0.7\textwidth}{l | p{0.3\textwidth}}
+		
+			\includegraphics[width=0.4\textwidth]{content/trees/graphic1.pdf} 
+		
+		& 
+		
+		Корень
+		
+		Родитель
+		
+		Ребёнок
+		
+		Предки
+		
+		Потомки	
+		
+		Братья
+		\\
+	\end{tabular*}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево} - конечное множество узлов, которое может быть либо пустым, либо
+	состоять из корня с двумя другими бинарными поддеревьями
+	
+	\includegraphics[width=0.5\textwidth]{content/trees/graphic1.pdf} 
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход дерева} - метод исследования дерева, при котором каждый узел посещается ровно один раз.
+	
+	\begin{itemize}
+		\item Прямой порядок: корень, все поддеревья начиная с самого левого
+		\item Обратный порядок
+		\item Центрированный порядок (только для бинарного дерева)
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АТД Дерево}
+\begin{lstlisting}
+interface Action<T> {
+	void doAction(T o);
+}
+
+interface Tree<T> {
+	T getData();
+	void setData(T o);
+	Tree<T> getLeftMostChild();
+	Tree<T> getRightMostChild();
+	Tree<T> getLeftSibling();
+	void setLeftSibling(Tree<T> sibling);
+	Tree<T> getRightSibling();
+	void setRightSibling(Tree<T> sibling);
+	Tree<T> getParent();
+	void setParent(Tree<T> parent);
+	void insertChildAsRightMost(Tree<T> child);
+	void preOrder(Action<T> a);
+	void postOrder(Action<T> a);
+	void levelPreOrder(Action<T> a); 
+	void descendantsPreOrder(Action<T> a);
+	void parentsFromRoot(Action<T> a);
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Прямой обход}
+\begin{lstlisting}
+public void preOrder(Action<T> a) {
+	a.doAction(data);
+	Tree<T> child = leftMostChild;
+	while(null != child) {
+		child.preOrder(a);
+		child = child.getRightSibling();
+	}
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Класс действия для прохода}
+\begin{lstlisting}
+class PrintData implements Action<Integer> {
+	public void doAction(Integer data) {
+		try {
+			wr.write(data + " ");
+		} catch (Exception e) {}
+	}
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Представление деревьев с помощью массивов}
+	
+	\includegraphics[width=0.5\textwidth]{content/trees/graphic3.pdf}
+	
+	A:
+\begin{tabular}[t]{| l | l | l |  l |  l |  l |  l |  l |  l |  l |}
+	\hline 
+	1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ 
+	\hline
+	0 & 1 & 1 & 2 & 2 & 5 & 5 & 5 & 3 & 3 \\ 
+	\hline
+\end{tabular}
+
+A[i]=j $\Rightarrow$ j родитель i ; A[i]=0 $\Rightarrow$ i корень
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Представление деревьев с помощью указателей}
+	
+	\includegraphics[width=0.7\textwidth]{content/trees/pointers.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Реализация деревьев с помощью указателей}
+\begin{lstlisting}
+class PointerTree<T> implements Tree<T> {
+	private T data;
+	private Tree<T> parent; 
+	private Tree<T> leftMostChild; 
+	private Tree<T> rightMostChild; 
+	private Tree<T> leftSibling; 
+	private Tree<T> rightSibling; 
+	...
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АТД Бинарное дерево}
+\begin{lstlisting}
+interface BinaryTree<T> {
+	T getData();
+	void setData(T o);
+
+	BinaryTree<T> getParent();
+	void setParent(BinaryTree<T> parent);
+
+	void setLeft(BinaryTree<T> value);
+	BinaryTree<T> getLeft();
+	
+	void setRight(BinaryTree<T> value);
+	BinaryTree<T> getRight();
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Представление бинарных деревьев с помощью массивов}
+	
+	\includegraphics[width=0.5\textwidth]{content/trees/binary.pdf}
+	
+	A:
+\begin{tabular}[t]{| l | l | l |  l |  l |  l |  l |}
+	\hline 
+	1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+	\hline
+	a & b & c & d & e & f & g \\ 
+	\hline
+\end{tabular}
+
+
+A[i] является родителем для A[2*i] и A[2*i+1], где A[2*i] и A[2*i+1] левый и правый ребенок соответственно.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Реализация бинарных деревьев с помощью указателей}
+	
+\begin{lstlisting}
+class BinaryTreeImpl<T> implements BinaryTree<T> {
+	BinaryTree<T> parent;
+	BinaryTree<T> left;
+	BinaryTree<T> right;
+	T data;
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Применение бинарных деревьев: кодирование и сжатие}
+	
+	\begin{tabular}[t]{| l | l | l |}
+		\hline 
+		Символ & Код №1 & Код №2 \\ 
+		\hline
+		a & 000 & 000\\ 
+		b & 001 & 11\\ 
+		c & 010 & 01\\ 
+		d & 011 & 001\\ 
+		e & 100 & 10\\ 
+		\hline
+	\end{tabular}
+
+	bcd $\Rightarrow$ 001 010 011 (Код №1) $\Rightarrow$ 11 01 001 (Код №2)
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Префиксный код} в теории кодирования — код со словом переменной длины, имеющий такое свойство: если в код входит слово $a$, то для любой непустой строки $b$ слова $ab$ в коде не существует. Хотя префиксный код состоит из слов разной длины, эти слова можно записывать без разделительного символа.
+
+	\textbf{Идея сжатия}: использовать для чаще встречающихся символов(слов) кодовые слова меньшей длины, чем для реже встречающихся.
+	
+	\textbf В {задаче построения префиксного кода} для символов определенной строки даны символы строки и их вероятность.
+
+	Как построить?
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Хаффмана}
+	
+	\includegraphics[width=0.9\textwidth]{content/trees/haffman.pdf}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Хаффмана}
+	
+\begin{enumerate}
+	\item Пока $\exists$ >1 дерева в лесу
+	\item i = индекс дерева с наименьшим весом, j = индекс дерева со вторым наименьшим весом
+	\item Создаем новый узел с левым сыном i и правым сыном j
+	\item Заменяем в лесу i-е дерево новым деревом и ставим ему вес как сумму весов i-го и j-го деревьев
+	\item Удаляем j-е дерево
+\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Реализация леса для алгоритма Хаффмана}
+	
+\begin{lstlisting}
+	class HaffmanTree extends BinaryTreeImpl<String> {
+		public double weight;
+		
+		public HaffmanTree(String str, double weight) {
+			super(str);
+			this.weight = weight;
+		}
+	}
+	
+	HaffmanTree[] forest = new HaffmanTree[MAX_COUNT];
+	int forestLength = 0;
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Основной цикл алгоритма Хаффмана}
+	
+\begin{lstlisting}
+length=forestLength;
+while (length > 1) {
+	swapInForest(getIndexWithMinWeight(), length-1);
+	forestLength--;
+	int min = getIndexWithMinWeight();
+	HaffmanTree newTree = new HaffmanTree(
+		forest[min].getData()+forest[length].getData(), 
+		forest[min].weight + forest[length].weight);
+	newTree.setLeft(forest[min]);
+	newTree.setRight(forest[length]);
+	forest[min] = newTree;
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.77-102}.
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.274-281, 459-467}.
+	\item Кнут Д, Искусство программирования, том 1. Основные алгоритмы, 3-е изд. - М. : Издательский дома ``Вильямс'', 2000. \textbf{сс.352-475}.
+\end{itemize}
+\end{slide}
+

@@ -1,0 +1,315 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Недетерминированные процессы. Обмен информацией между процессами.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Детерминированность} - определяемость. Детерминированность может подразумевать определяемость на общегносеологическом уровне или для конкретного алгоритма. Под \textit{детерминированностью процессов} в мире понимается однозначная \textbf{предопределённость}.
+	
+	Детерминированность \textit{в решении какой-либо практической задачи или в алгоритме} означает, что способ решения задачи \textbf{определён однозначно} в виде последовательности шагов. На любом шаге не допускаются никакие двусмысленности или неопределённости и независимо от единичных вещей.
+	
+	\textit{В теории игр} — \textbf{существование выигрышной стратегии} для одного из игроков. То есть алгоритма, следуя которому один (и только один) из игроков неизбежно выигрывает.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Детерминированный выбор}
+	
+	$P \ | \ Q$
+	
+	$P \ || \ Q$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Недетерминированный выбор} - выбор происходит независо (без управления) от внешнего окружения.
+	
+	$P \intchoice Q, \alpha (P \intchoice Q) = \alpha P = \alpha Q$
+	
+	Пример:
+	
+	$CH5D = (in5p \rightarrow ((out1p \rightarrow out1p \rightarrow out1p \rightarrow out2p \rightarrow CH5D)\newline
+	\intchoice (out2p \rightarrow out1p \rightarrow out2p \rightarrow CH5D))$ 
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Множество отказов} - $refusals(P) = X$
+
+	$X$ - множество событий, которые могут быть первыми в цепочке событий, которая приведет к тупику (deadlock).
+	
+	$P=(x \rightarrow P), Q = (y \rightarrow Q), \alpha P = \alpha Q = \{x,y\}$
+	
+	$(P \extchoice Q) \ || \ P = (x \rightarrow P) = P$
+
+	$(P \intchoice Q) \ || \ P = (P \ || \ P) \intchoice (Q \ || \ P) = P \intchoice \STOP$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Определение детерминированного процесса}
+
+	$P$ является детерминированным $\equiv$\newline
+	$\forall s : traces(P) \bullet (X \in refusals(P/s) \equiv (X \bigcap (P/s)^0 = \{\}))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Операция сокрытия}
+
+	$P \hide C, \alpha(P \hide C) = (\alpha P) - C$
+	
+	Пример:
+	
+	$NOISYVM \hide \{click, clunk, toffee\} = VMS$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Перемешивание процессов} - параллельное выполнение процессов без прямого взаимодействия и синхронизации.
+
+	$P \interleave Q, \alpha(P \interleave Q) = \alpha P = \alpha Q$
+	
+	$P = (x:A \rightarrow P(x)), Q = (y:B \rightarrow Q(y))$
+	
+	$P \interleave Q = (x:A \rightarrow (P(x) \interleave Q) \extchoice y:B \rightarrow (P \interleave Q(y)))$
+	
+	Пример:
+	
+	$VMS \interleave VMS$ - два рядом стоящих автомата.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Спецификации}
+
+	$P \sat S(tr, ref) \newline \equiv \forall tr, ref \bulet tr \in traces(P) \wedge ref \in refusals(P/tr) \Rightarrow S(tr, ref)$
+	
+	Пример:
+	
+	$FAIR = (tr \cnt choc < tr \cnt coin \Rightarrow choc \notin ref)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Самый недетерминированный процесс}
+	
+	$\CHAOS$
+	
+	$P \intchoice \CHAOS = \CHAOS$
+	
+	$\traces(\CHAOS_A) = A^*$
+
+	$\refusals(\CHAOS_A) = $ булеан $A$.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Расходящиеся процессы}
+
+	$\divergences(P) = \{s \barchoice s \in \traces(P) \wedge (P/s) = \CHAOS_{\alpha P}\}$
+
+	$P$ - расходящийся, если $|\divergences(P)| > 0$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обмен информацией между процессами}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Каналы. Сообщения}
+	
+	Множество сообщений канала $c$ процесса $P$ - \newline $\alpha c(P) = \{v \ | \ c.v \in \alpha P\}$
+	
+	$channel(c.v) = c, message(c.v) = v$
+	
+	Ввод: $(c?x \then P(x)) = (y:\{y \ | \ channel(y) = c\} \then P(message(y)))$
+
+	Вывод: $(c!v \then P) = (c.v \then P)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Примеры: копирование бита, удвоение}
+
+	$COPYBIT = \mu X \spot (in?x \then (out!x \then X))$	
+	
+	$DOUBLE = \mu X \spot (left?x \then right!(x+x) \then X)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. Упаковка-распаковка}
+
+	$\alpha right = \{s \ | \ s \in \alpha left^* \wedge \#s=125\}$ \newline
+	$PACK = P_{\left\langle \right\rangle}$\newline
+	$P_s = right!s \then P_{\left\langle \right\rangle}, \#s = 125\newline$
+	$P_s = left?x \then P_{s \roundcat \left\langle x \right\rangle}, \#s < 125$
+	
+	$\alpha left = \{s \ | \ s \in \alpha right^* \wedge \#s=125\}$ \newline
+	$UNPACK = P_{\left\langle \right\rangle}$\newline
+	$P_{\left\langle \right\rangle} = left?s \then P_s\newline$
+	$P_{\left\langle x\right\rangle} = right!x \then P_{\left\langle \right\rangle}\newline$
+	$P_{\left\langle x\right\rangle \roundcat s} = right?x \then P_s$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Спецификации}
+
+	$tr \cnt c = message^*(tr \restrict \alpha c)$
+	
+	Минимальный размер префикса - $s \prefix^n t = (s \prefix t \wedge \#t \leq \#s + n)$
+	
+	$PACK \sat ((\roundcat/right \prefix^125 left) \wedge(\#^*right \in \{125\}^*))$
+	
+	$FIB \sat (right \prefix \left\langle 1,1\right\rangle \vee (\left\langle 1,1\right\rangle \prefix right \wedge right'' \prefix right' + right))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обменивающиеся процессы}
+	
+	$(c!v \then P) \parallel (c?x \then Q(x)) = c!v \then (P \parallel Q(v))$
+	
+	$(c!v \then P) \parallel (c?x \then Q(x)) \hide C = c!v \then (P \parallel Q(v)) \hide C, \newline$
+	$C = \{c.v \ | \ v \in \alpha c\}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример}
+	
+	$P = (left?x \then mid!(x\times x) \then P)$\newline
+	$Q = (mid?y \then right!(173\times y) \then Q$
+	
+	$P \sat (mid \prefix^1 square^*(left))$\newline
+	$Q \sat (right \prefix^1 173 \times mid)$
+	
+
+	$P \parallel Q \sat (right \prefix^1 173 \times mid) \wedge (mid \prefix^1 square^*(left)) \newline
+	\Rightarrow$	$right \prefix 173 \times square^*(left)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. ``Умножение векторов''}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/communicating_processes/vector_mult.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. ``Умножение векторов''}
+
+	$\displaystyle NETWORK \sat right \prefix \sum_{j=0}^{n-1}{V_j \times left_j}$
+	
+	$MULT_0 = (\mu X \spot mid!0 \then X)$
+	
+	$MULT_{j+1} = (\mu X \spot left_j?x \then mid_j?y \then mid_{j+1}!(V_j \times x + y) \then X)$
+
+	$MULT_{n+1} = (\mu X \spot mid_n?x \then right!x \then X)$
+	
+	$NETWORK = \parallel_{j < n+2}MULT_j$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Цепочки (pipes)}
+
+	$P \chain Q$
+
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/communicating_processes/pipes.png}	
+	\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Примеры цепочек}
+
+	$QUADRUPLE = DOUBLE \chain DOUBLE$
+
+	$UNPACK \chain PACK$
+
+	$UNPACK \chain BUFFER \chain PACK$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Динамическая взаимоблокировка (активный тупик, livelock)}
+
+
+	$P = (right!1 \then P)$\newline
+	$Q = (left?x \then Q)$
+	
+	$P = (right!1 \then P \barchoice left?x \then P1(x))$\newline
+	$Q = (left?x \then Q \barchoice right!1 \then Q1)$
+	
+	$P \chain Q$ свободет от активных тупиков если, $P$ защищен слева $\equiv \exists f \spot P \sat (\#right \leq f(left))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Буферы}
+
+	$P$ - буфер, если \newline $P \sat (right \prefix left) \wedge (if \ right = left \ then \ left \notin \refuses else \ right \notin \refuses)$
+
+	
+	$(T \chain WIRE \chain R)$ - буфер.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример буфера. Совместное использование линии передачи}
+
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{content/communicating_processes/line_sharing.png}	
+	\end{center}
+
+	$T = (left1?x \then mid!tag1(x) \then T \barchoice left2?y \then mid!tag2(y) \then T)$
+	
+	$R = mid?z \then $\newline
+	$if \ tag(z) = 1 then (right1!untag(z) \then R)$\newline
+	$else (right2!untag(z) \then R)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Подчинение}
+	
+	$\alpha P \subseteq \alpha Q$
+
+	$P \enslave Q = (P \parallel Q) \hide P$
+	
+	$\alpha(P \enslave Q) = \alpha Q - \alpha P$
+	
+	$m:(c!v \then P) \enslave (m.c?x \then Q(x)) = m:P \enslave Q(v)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример подчинения. Умножение на четыре}
+
+	$QUADRUPLE = \newline d:DOUBLE \enslave \newline (\mu X \spot left?x \then d.left!x \then d.right?y \then d.left!y \then d.right?z \then right!z \then X)$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Hoare, C.A.R., Communicating Sequential Processes, 2004, http://www.usingcsp.com/cspbook.pdf \textbf{pp.81-152}
+	\item Хоар, Ч., Взаимодействующие последовательные процессы- М.: Мир, 1989.
+	\item Roscoe, A.W., The Theory and Practice of Concurrency, 2005, \newline http://web.comlab.ox.ac.uk/oucl/work/bill.roscoe/ \newline publications/68b.pdf.
+\end{itemize}
+\end{slide}

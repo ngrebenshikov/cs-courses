@@ -1,0 +1,43 @@
+<project name="build-utils">
+	<property name="tools" value="${basedir}/tools"/>
+
+	<taskdef name="latex" classname="de.dokutransdata.antlatex.LaTeX" classpath="tools/ant_latex_0.0.9_1.jar" />
+	<taskdef name="saxon-xslt" classname="net.sf.saxon.ant.AntTransform" classpath="${basedir}/tools/saxon9he.jar;${basedir}/tools/saxon9-ant.jar"/>
+
+	<target name="build_dir_to_pdf">
+		<echo message="Building PDFs in ${source.dir} and copying to ${output.dir}"/>
+		<latex verbose="on" clean="on" pdftex="on" workingDir="${source.dir}">
+			<fileset dir="${source.dir}">
+				<include name="*.tex" />
+				<exclude name="header.tex" />
+			</fileset>
+		</latex>
+		<copy todir="${output.dir}">
+			<fileset dir="${source.dir}" includes="*.pdf"/>
+		</copy>
+		<delete>
+			<fileset dir="${source.dir}">
+				<include name="*.dvi" />
+				<include name="*.pdf" />
+			</fileset>
+		</delete>
+	</target>
+	<target name="pdf2swf">
+		<echo message="Building SWF ${swf} from PDF ${pdf}"/>
+		<exec dir="${basedir}" executable="${tools}/pdf2swf.exe" failonerror="true">
+			<arg line="&quot;${pdf}&quot; -t -o &quot;${swf}&quot;"/>
+		</exec>
+	</target>
+
+	<target name="pdf2swf_apply">
+		<echo message="Building SWFs from directory ${src.dir} to ${dest.dir}"/>
+		<apply executable="${tools}/pdf2swf.exe" dest="${dest.dir}" parallel="false">
+			<arg value="-t"/>
+			<arg value="-o"/>
+			<targetfile/>
+			<srcfile/>
+			<fileset dir="${src.dir}" includes="*.pdf"/>
+			<mapper type="glob" from="*.pdf" to="*.swf"/>
+		</apply>
+	</target>
+</project>

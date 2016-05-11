@@ -1,0 +1,166 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Красно-черные деревья.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Отличия красно-черного дерева от AVL-дерева}
+	
+	\begin{enumerate}
+		\item Каждый узел красно-черного дерева содержит поле цвет вместо высоты.
+		\item Для красно-черного дерева требуется меньше памяти.
+		\item Для красно-черного дерева требуется меньше операций для поддержания сбалансированности.
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Свойства красно-черного дерева}
+	
+	\begin{enumerate}
+		\item Каждый узел является красным или черным.
+		\item Корень дерева является черным.
+		\item Каждый лист дерева является черным.
+		\item Если узел красный, то оба его дочерних узла - черные.
+		\item Для каждого узла все пути от него до листьев, являющихся его потомками, содержат одно и то же количество черных узлов.
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Красно-черное дерево}
+	
+	\includegraphics[width=1\textwidth]{content/red_black_trees/rb_tree1.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Красно-черное дерево}
+	
+	\includegraphics[width=1\textwidth]{content/red_black_trees/rb_tree2.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Красно-черное дерево}
+	
+	\includegraphics[width=1\textwidth]{content/red_black_trees/rb_tree3.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Лемма о высоте красно-черного дерева}
+
+	$H(n) \leq 2lg(n+1)$	
+	
+	\textbf{Доказательство:}
+	
+	Пусть $bh(x)$ - количество черных узлов от узла $x$ к листу. Покажем, что поддерево любого узла $x$ содержит как минимум $2^{bh(x)}-1$ узлов.
+	
+	Базис индукции: высота $x$ - $0$, $2^{bh(x)}-1 = 2^0-1 = 0$
+	
+	Посылка: для всех $x$ с высотой $<h$, $N(x) \geq 2^{bh(x)}-1$
+	
+	Шаг индукции: высота $x = h$, $N(x) = (2^{bh(x)-1}-1)+(2^{bh(x)-1}-1)+1=2^{bh(x)}-1$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Лемма о высоте красно-черного дерева}
+
+	Согласно 4-му свойству КР-дерева, $BH(n) \geq H(n)/2$	
+	
+	Тогда $n \geq 2^{H(n)/2} - 1$
+	
+	Переносим единицу влево, логарифмируем, получаем - 
+	
+	$H(n) \leq 2lg(n+1)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Повороты в бинарном дереве}
+	
+	\includegraphics[width=1\textwidth]{content/red_black_trees/rotates.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Левый поворот}
+	
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/red_black_trees/left_rotate.png}
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Вставка}
+	
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/red_black_trees/rb_insert.png}
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Нарушение свойств дерева. Случай №1}
+	
+	Узел $y$ - красный.
+	
+	\begin{center}
+		\includegraphics[width=1\textwidth]{content/red_black_trees/case1.png}
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Нарушение свойств дерева. Случаи №2 и №3}
+	
+	Узел $y$ - черный.
+	
+	\begin{center}
+		\includegraphics[width=1\textwidth]{content/red_black_trees/case23.png}
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Восстановление (балансировка)}
+	
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/red_black_trees/rb_insert_fixup.png}
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритма вставки}
+	
+	$H(n) = O(log\:n) \Rightarrow  T_{RB\_Insert[1-16]}(n) = O(lg\:n)$
+
+	$H(n) = O(lg\:n) \Rightarrow  T_{RB\_Insert\_Fixup[while]}(n) = O(lg\:n)$
+	
+	$T_{RB\_Insert} = O(lg\:n)$
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм удаления на семинар!}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.336-364}.
+\end{itemize}
+\end{slide}
+
+

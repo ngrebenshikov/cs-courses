@@ -1,0 +1,316 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Графы: кратчайшие пути и максимальные потоки.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача поиска кратчайшего пути}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/roads_map.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача поиска кратчайшего пути}
+	
+	Дан граф $G=(V,E)$ с весовой функцией $w : E \rightarrow R$. 
+	
+	\textbf{Вес пути} $p = \left\langle v_0, v_1, \ldots, v_k\right\rangle$ 
+	равен суммарному весу входящих в него ребер. $\displaystyle w(p) = \sum_{i=1}^{k}{w(v_{i-1}, v_i)}$
+	
+	\textbf{Вес кратчайшего пути} из вершины $u$ в вершину $v$ определяется соотношением:
+	
+	$\delta(u,v) = \begin{cases} min\left\{ w(p) : u \stackrel{p}{\rightarrow} v\right\}, & \mbox{если имеется путь от} u\mbox{ к }v 
+		\\ \infty, & \mbox{в противном случае }\end{cases}$
+
+	\textbf{Кратчайший путь} из вершины $u$ в вершину $v$ - это любой путь $p$, что $w(p) = \delta(u,v)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача поиска кратчайшего пути}
+	
+	\begin{itemize}
+		\item из заданной вершины во все остальные
+		\item между всеми парами вершин
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Свойство кратчайщего пути}
+	
+
+	Пусть \textbf{$p = \left\langle v_1,v_2, \ldots, v_k\right\rangle$ - кратчайший путь из вершины $v_1$ к вершине $v_k$} в заданном взвешенном ориентированном
+	графе $G=(V,E)$ с весовой функцией $w : E \rightarrow R$, а \textbf{$p_{ij}=\left\langle v_i,v_{i+1},\dots,v_j\right\rangle$ - частичный путь пути $p$}, который проходит из вершины $v_i$
+	к вершине $v_j$ для произвольных $i$ и $j$ $(1 \leq i \leq j \leq k)$. \textbf{Тогда $p_{ij}$ - кратчайший путь из вершины $v_i$ к вершине $v_i$}.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Отрицательные ребра и циклы}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/negative_edges.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Релаксация (ослабление)}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/relaxation.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Поиск путей из заданной вершины: Алгоритм Дейкстры (Dijkstra)}
+	
+	\includegraphics[width=0.8\textwidth]{content/graphs/dijkstra_listing.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Дейкстры}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/dijkstra_example.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритма Дейкстры} для очереди с приоритетами в виде кучи
+	
+	$T(G) = \Theta(V) + \Theta(V log V) + \Theta(V (log V + deg()logV)) = \Theta((V+E)logV)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{На семинар}
+	
+\begin{itemize}
+	\item Алгоритм Беллмана-Форда
+	\item Поиск кратчайших путей из одной вершины в ориентированных ациклических графах
+	\item Разностные ограничения и кратчайшие пути
+\end{itemize}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Поиск путей из всех пар вершин: Алгоритм Флойда-Вашалла}
+	
+	$d_{ij}^{(k)}$ - кратчайший путь из вершины $i$ в $j$, в котором все внутренние точки пути выбраны из множества $\left\{1,2,\ldots,k\right\}$
+	
+	\includegraphics[width=0.8\textwidth]{content/graphs/floyd_intermediate.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Флойда-Вашалла}
+
+	$d_{ij}^{(0)} = w_{ij}$	
+
+	$d_{ij}^{(k)} = min(d_{ij}^{(k)}, d_{ik}^{(k-1)} + d_{kj}^{(k-1)}), k \geq 1$	
+	
+	Результирующая матрица: $d^{(n)}$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Флойда-Варшалла}
+	
+	\includegraphics[width=0.8\textwidth]{content/graphs/floyd_listing.png}	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ: алгоритма Флойда-Варшалла}
+	
+	$T(G)=?$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{На семинар}
+	
+	\begin{itemize}
+		\item Алгоритм Джонсона для разреженных графов
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Транспортная сеть} - ориентированный граф, в котором каждое ребро имеет \textbf{неотрицательную пропускную способность} $c(u,v) > 0$
+	Транспортная сеть имеет две специальных вершины источник $s$ и сток $t$. Если $(u,v) \notin E \Rightarrow c(u,v)=0$.
+	
+	\textbf{Поток} в графе - есть функция $f : V \times V \rightarrow R$, обладающая следующими свойствами
+\begin{itemize}
+	\item Ограничение пропускной способности: $f(u,v) \leq c(u,v)$
+	\item Антисимметричность: $f(u,v) = -f(v,u)$ 
+	\item Сохранение потока: для всех $u \in V - {s,t} \Rightarrow \displaystyle \sum_{v \in V}{f(u,v)} = 0$
+\end{itemize}
+	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Потоки}
+
+	\includegraphics[width=1\textwidth]{content/graphs/flows.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Величина потока $f$} определяется как $\displaystyle \left|f\right| = sum_{v \in V}{f(s,v)}$
+
+	\textbf{Задача о максимальном потоке:} дана некоторая транспортная сеть, и необходимо найти поток максимальной величины.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Метод Форда-Фалкерсона}
+
+	\begin{codebox}
+	\Procname{$\proc{FordFulkersonMethod}(G,s,t)$}
+	\li Задаем значение потока $f$ равным $0$
+	\li \While существует увеличивающий путь p
+	\li \Do увеличиваем поток $f$ вдоль пути $p$
+	\End 
+	\li \Return $f$
+	\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Остаточные сети}
+
+	\textbf{Остаточная пропускная способность:} 
+	
+	$c_f(u,v) = c(u,v) - f(u,v)$
+	
+	\textbf{Остаточная сеть} есть граф 
+	
+	$G_f(V,E_f), E_f = \left\{(u,v) \in V \times V : c_f(u,v) > 0\right\}$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Остаточные сети}
+
+	\includegraphics[width=1\textwidth]{content/graphs/residual_networks.png}	
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Для заданных транспортной сети $G=(V,E)$ и потока $f$ \textbf{увеличивающим путем} $p$ является путь из $s$ в $t$ в остаточной сети $G_f$ 
+	
+	\textbf{Пропускная способность пути:} $c_f(p) = min\left\{c_f(u,v) : (u,v) \in p\right\}$
+	
+	\textbf{Увеличивающий поток:} 
+	
+	$f_p(u,v) = \begin{cases}
+		c_f(p), & \mbox{если} (u,v) \in p, \\
+		-c_f(p), & \mbox{если} (v,u) \in p, \\
+		0, & \mbox{в противном случае}
+	\end{cases}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Разрез} транспортной сети - разбиение множества $V = S \bigcup T$, что $s \in S$, а $t \in T$
+	
+	Пропускная способность разреза - $c(S,T) = 12 + 14 = 26$
+	
+	Чистый поток - $f(S,T) = 12 + (-4) + 11 = 19$
+
+	\includegraphics[width=0.5\textwidth]{content/graphs/network_cut.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Минимальный разрез} - разрез с минимальной пропускной способностью.
+
+	\textbf{Теорема о максимальном потоке и минимальном разрезе}
+
+	Следующие утверждения эквивалентны:
+	
+	\begin{itemize}
+		\item $f$ - максимальный поток в $G$
+		\item Остаточная сеть $G_f$ не содержит увеличивающих путей.
+		\item $\left|f\right|=c(S,T)$ для некоторого разреза $(S,T)$ сети $G$.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Форда-Фалкерсона}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/ford_fulkerson_listing.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Форда-Фалкерсона}
+	
+	\includegraphics[width=0.8\textwidth]{content/graphs/ford_fulkerson_example1.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Форда-Фалкерсона}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/ford_fulkerson_example2.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритма Форда-Фалкерсона}
+	
+	$T(G) = \Theta(E) + O(Ef^*) = O(Ef^*)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритма Форда-Фалкерсона}
+	
+	$T(G) = \Theta(E) + \Theta(E|f^*|) = \Theta(E|f^*|)$
+	
+	\textbf{Плохой случай:}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/ford_fulkerson_bad_case.png}	
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{На семинар}
+	
+	\begin{itemize}
+		\item Алгоритм Эдмондса-Карпа
+		\item Поиск максимального паросочетаня в двудольном графе
+		\item Алгоритм проталкивания предпотока
+		\item Алгоритм ``поднять и в начало''
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item David M. Mount, The Lecture notes: Design and Analysis of Computer Algorithms. [Электронный ресурс] / Dept. of Computer Science, University of Maryland, 2004. - Режим доступа: http://www.cs.umd.edu/~mount/451/Lects/451lects.pdf . - \textbf{сс.49-55, 118-125}
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.663-794}.
+\end{itemize}
+\end{slide}
+

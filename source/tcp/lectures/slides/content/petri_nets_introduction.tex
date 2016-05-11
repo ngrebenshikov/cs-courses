@@ -1,0 +1,317 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Сети Петри. Введение}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сети Петри. Зачем?}
+	
+	Начало: Карл Адам Петри ``Связь автоматов'', 1966.
+
+	Анализ, моделирование и представление причинно-следственных связей в сложных системах параллельно действующих объектов.
+	
+	\begin{center}
+		\includegraphics[height=0.5\textheight]{content/petri_nets/applications.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Структура сети Петри}
+
+	$C = (P,T,I,O)$
+	
+	$P = \{p_1, p_2, \ldots, p_n\}$ - множество позиций.
+	
+	$T = \{t_1, t_2, \ldots, t_m\}$ - множество переходов.
+	
+	$P \bigcap T = \oslash$
+	
+	$I : T \rightarrow P^\infty$ - входная функция.
+	
+	$O : T \rightarrow P^\infty$	- выходная функция.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример сети Петри}
+
+	$C = (P,T,I,O)$\newline
+	$P = \{p_1, p_2, p_3, p_4, p_5\}$\newline
+	$T = \{t_1, t_2, t_3, t_4\}$
+
+	$I(t_1) = \{p_1\}$\newline
+	$I(t_2) = \{p_2, p_3, p_5\}$	\newline
+	$I(t_3) = \{p_3\}$	\newline
+	$I(t_4) = \{p_4\}$
+	
+	$O(t_1) = \{p_2, p_3, p_5\}$\newline
+	$O(t_2) = \{p_5\}$\newline
+	$O(t_3) = \{p_4\}$\newline
+	$O(t_4) = \{p_2, p_3\}$\newline
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Входная и выходная позиции}
+
+	$p_i$ - входная позиция $t_j \Leftrightarrow p_i \in I(t_j)$
+	
+	$p_i$ - выходная позиция $t_j \Leftrightarrow p_i \in O(t_j)$
+	
+	Входы и выходы переходов - \textit{комплекты}.
+	
+	\textit{Комплект} - обобщение множества, в которое включены повторяющиеся элементы. \textit{(можно взять для реферата)}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Расширенные входная и выходная функции}
+
+	$I : P \rightarrow T^\infty$ - расширенная входная функция.
+	
+	$O : P \rightarrow T^\infty$	- расширенная выходная функция.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример расширенных входной и выходной функций (для предыдущего примера)}
+
+	$I(p_1) = \{\}$\newline
+	$I(p_2) = \{t_1, t_4\}$\newline
+	$I(p_3) = \{t_1, t_4\}$\newline
+	$I(p_4) = \{t_3\}$\newline
+	$I(p_5) = \{t_1, t_2\}$
+
+	$O(p_1) = \{t_1\}$\newline
+	$O(p_2) = \{t_2\}$\newline
+	$O(p_3) = \{t_2, t_3\}$\newline
+	$O(p_4) = \{t_4\}$\newline
+	$O(p_5) = \{t_2\}$\newline
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Граф сети Петри}
+
+	$G=(V, A)$
+	
+	$V = \{u_1, u_2, \dots, u_s\}$ - множество вершин
+	
+	$A = \{a_1, a_2, \dots, a_r\}$ - \newline множество направленных ребер $a_i=(v_j,v_k), v_j,v_k \in V$
+	
+	$V = P \bigcup T, P \bigcap T = \oslash$
+	
+	$a_i=(v_j, v_k) \in A \Leftrightarrow (v_j \in P \wedge v_k \in T) \vee (v_j \in T \wedge v_k \in P)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Граф сети Петри}
+
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/example_1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Двойственные сети Петри}
+	
+	$C=(P,T,I,O) \Rightarrow \overline{C}=(T,P,I,O)$
+
+	\begin{center}
+		\includegraphics[height=0.6\textheight]{content/petri_nets/example_1_invert.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Маркировка сети Петри}
+
+	Маркировка $\mu$ - присвоение фишек позициям сети Петри.
+	
+	\textit{Фишка} - примитивное понятие.
+	
+	$\mu : P \rightarrow N$
+	
+	$\mu = (\mu_1, \mu_2, \ldots , \mu_n), n=\left|P\right|, \mu_i \in N$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Маркировка сети Петри}
+
+	$\mu = (1, 2, 0, 0, 1)$
+
+	\begin{center}
+		\includegraphics[height=0.6\textheight]{content/petri_nets/example_2_marked.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Маркированная сеть Петри}
+
+	$M = (C, \mu) = (P, T, I, O, \mu)$
+
+	\textbf{Большая маркировка} - $\mu = (47, 13, 7, 42)$
+	
+	\begin{center}
+		\includegraphics[height=0.6\textheight]{content/petri_nets/example_3_marked.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выполнение сети Петри}
+	
+	Выполнением упраляют количество и распределение фишек.
+	
+	Сеть выполняется посредством запуска переходов.
+	
+	Переход запускается когда он разрешен.
+	
+	Переход разрешен, если каждая из его входных позиций имеет число фишек по крайней мере равное  числу ребер из позиции в переход.
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выполнение сети Петри}
+	
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/example_2_marked.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Разрешенный переход}
+	
+	$t_j$ в $M=(P,T,I,O,\mu)$ - разрешен, \newline если $\forall p_i \in P \spot \mu(p_i) \geq \#(p_i, I(t_i))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Запуск перехода}
+
+	Переход $t_j$ в $M=(P, T, I, O, \mu)$ можен быть запущен всякий раз, когда он разрешен.
+	
+	Результат запуска перехода $t_j$ - новая маркировка $\mu^{'}$.
+	
+	$\mu^{'} = \mu(p_i) - \#(p_i, I(t_j)) + \#(p_i, O(t_j))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Запуск перехода}
+	
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/process_transition.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выполение сети Петри}
+	
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/process_transition_1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выполение сети Петри. Сработал $t_4$}
+	
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/process_transition_2.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выполение сети Петри. Сработал $t_1$}
+	
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/process_transition_3.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Выполение сети Петри. Сработал $t_3$}
+	
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/process_transition_4.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Состояние сети Петри} определяется маркировкой.
+	
+	Функция следующего состояния $\delta : N^n \times T \rightarrow N^n$ для сети $C=(P,T,I,O)$ определена, если $\mu(p_i) \geq \#(p_i, I(t_i))$
+	
+	$\delta(\mu, t_j) = \mu^{'} = \mu(p_i) - \#(p_i, I(t_j)) + \#(p_i, O(t_j))$
+	
+	\textbf{При выполнении сети получаем:}
+	
+	\begin{itemize}
+		\item последовательность маркировок - $(\mu^0, \mu^1, \mu^2, \ldots)$
+		\item последовательность переходов - $(t_0, t_1, t_2, \ldots)$
+	\end{itemize}
+	
+	Инвариант: $\delta(\mu^k, t_k) = \mu^{k+1}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Достижимость в сети Петри}
+	
+	Для сети $C=(P,T,I,O)$ и $\mu$ маркировка $\mu^{'}$ называется \textbf{непосредственно достижимой} из $\mu$, если $\exists t_j \in T \spot \delta(\mu, t_j)=\mu^{'}$.
+	
+	\textbf{Множество достижимости} $R(C, \mu)$ - наименьшее множиство маркировок определенных следующим образом:
+	
+	\begin{enumerate}
+		\item $\mu \in R(C, \mu)$
+		\item $\mu^{'} \in R(C, \mu) \wedge \mu^{''}=\delta(\mu^{'}, t_j), t_j \in T \Rightarrow \mu^{''} \in R(C, \mu)$
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Достижимость в сети Петри}
+	
+	\begin{center}
+		\includegraphics[height=0.3\textheight]{content/petri_nets/reachability.png}	
+	\end{center}
+	
+	$R(C, \mu) = \{(1,0,n), (0,1,n) | n \geq 0\}$
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Расширенная финкция следующего состояния}
+	
+	$\sigma \in T^*$ - последовательность переходов.
+	
+	$\delta(\mu, t_j, \sigma) = \delta(\delta(\mu, t_j), \sigma)$
+	
+	$\delta(\mu, \lambda) = \mu^{'}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Питерсон, Дж., Теория сете Петри и моделирование систем - М.: Мир, 1984. - \textbf{сc.1-35}
+	\item Котов, В.Е., Сети Петри. - М.: Наука, 1984.
+\end{itemize}
+\end{slide}

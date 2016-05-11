@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<project name="courses" default="build">
+	<import file="build-utils.xml"/>
+
+	<property name="project.root.path" location=".."/>
+	<property name="source.path" location="${project.root.path}/source"/>
+	<property name="output.path" value="${project.root.path}/release"/>
+	<property name="dsa.output.path" value="${output.path}/Структуры данных и алгоритмы"/>
+	<property name="dsa.site.output.path" value="${output.path}/dsa-site"/>
+	<property name="dsa.source.path" location="${source.path}/dsa"/>
+	<property name="tcp.output.path" value="${output.path}/Теория вычислительных процессов"/>
+	<property name="tcp.source.path" location="${source.path}/tcp"/>
+	
+	<!-- Remove everything form local build path -->
+	<target name="clean">
+		<delete failonerror="false">
+			<fileset dir="${output.path}" includes="**/*.*"/>
+		</delete>
+		<mkdir dir="${output.path}"/>
+	</target>	
+	
+	<target name="build" depends="clean">
+		<antcall target="build_dsa"/>
+		<antcall target="build_tcp"/>
+	</target>	
+	
+	<!-- ##################################################################
+		Build "Data structures and algorithms"
+	#######################################################################-->
+
+	<target name="build_dsa">
+		<mkdir dir="${dsa.output.path}"/>
+		<antcall target="build_dsa_static" />
+		<antcall target="build_dsa_lectures" />
+		<antcall target="build_dsa_seminars" />
+		<antcall target="build_dsa_labs" />
+		<zip destfile="${output.path}/dsa.zip" basedir="${dsa.output.path}" encoding="Cp866"/>
+		<zip destfile="${output.path}/dsa-lab-tests.zip" basedir="${dsa.source.path}/lab_tests"/>
+	</target>
+
+	<target name="build_dsa_lectures">
+		<antcall target="build_dir_to_pdf">
+			<param name="source.dir" value="${dsa.source.path}/lectures/slides"/>
+			<param name="output.dir" value="${dsa.output.path}/03 Лекции"/>
+		</antcall>
+	</target>
+
+	<target name="build_dsa_seminars">
+		<antcall target="build_dir_to_pdf">
+			<param name="source.dir" value="${dsa.source.path}/seminars"/>
+			<param name="output.dir" value="${dsa.output.path}/10 Семинары"/>
+		</antcall>
+	</target>
+
+	<target name="build_dsa_labs">
+		<antcall target="build_dir_to_pdf">
+			<param name="source.dir" value="${dsa.source.path}/labs/tasks"/>
+			<param name="output.dir" value="${dsa.output.path}/04 Лабораторный практикум"/>
+		</antcall>
+		<copy todir="${dsa.output.path}/04 Лабораторный практикум/Решение лабораторной работы N0/sa_lab0_1">
+			<fileset dir="${dsa.source.path}/labs/solutions/sa_lab0_1"/>
+		</copy>
+		<copy todir="${dsa.output.path}/04 Лабораторный практикум/Решение лабораторной работы N0/sa_lab0_2">
+			<fileset dir="${dsa.source.path}/labs/solutions/sa_lab0_2"/>
+		</copy>
+	</target>
+
+	<target name="build_dsa_static">
+		<copy todir="${dsa.output.path}">
+			<fileset dir="${dsa.source.path}/complex"/>
+		</copy>
+	</target>
+
+	<target name="build_dsa_site">
+		<mkdir dir="${dsa.site.output.path}"/>
+		<antcall target="build_dsa_site_lectures" />
+	</target>
+
+	<target name="build_dsa_site_lectures">
+		<mkdir dir="${dsa.site.output.path}/lectures"/>
+		<antcall target="pdf2swf_apply">
+			<param name="src.dir" value="${dsa.output.path}/03 Лекции"/>
+			<param name="dest.dir" value="${dsa.site.output.path}/lectures"/>
+		</antcall>
+	</target>
+
+	<target name="build_dsa_site_html">
+		<mkdir dir="${dsa.site.output.path}/lectures"/>
+		<saxon-xslt destdir="${dsa.site.output.path}" in="dsa-site.xml" style="dsa-site.xsl" out="${dsa.site.output.path}/dsa-site.html" />
+	</target>
+
+	<!-- ##################################################################
+		Build "Theory of computational processes"
+	#######################################################################-->
+
+	<target name="build_tcp">
+		<mkdir dir="${tcp.output.path}"/>
+		<antcall target="build_tcp_static" />
+		<antcall target="build_tcp_lectures" />
+		<antcall target="build_tcp_seminars" />
+		<antcall target="build_tcp_homework" />
+		<antcall target="build_tcp_exam" />
+		<zip destfile="${output.path}/tcp.zip" basedir="${tcp.output.path}" encoding="Cp866"/>
+	</target>
+
+	<target name="build_tcp_static">
+		<copy todir="${tcp.output.path}">
+			<fileset dir="${tcp.source.path}/complex"/>
+		</copy>
+	</target>
+
+	<target name="build_tcp_lectures">
+		<antcall target="build_dir_to_pdf">
+			<param name="source.dir" value="${tcp.source.path}/lectures/slides"/>
+			<param name="output.dir" value="${tcp.output.path}/03 Лекции"/>
+		</antcall>
+	</target>
+
+	<target name="build_tcp_seminars">
+		<antcall target="build_dir_to_pdf">
+			<param name="source.dir" value="${tcp.source.path}/seminars"/>
+			<param name="output.dir" value="${tcp.output.path}/10 Семинары"/>
+		</antcall>
+	</target>
+
+	<target name="build_tcp_homework">
+		<antcall target="build_dir_to_pdf">
+			<param name="source.dir" value="${tcp.source.path}/homework"/>
+			<param name="output.dir" value="${tcp.output.path}/11 Домашние работы"/>
+		</antcall>
+	</target>
+
+	<target name="build_tcp_exam">
+		<latex verbose="off" clean="on" pdftex="on" workingDir="${tcp.source.path}/exam">
+			<fileset dir="${tcp.source.path}/exam">
+				<include name="ТВП-Экзаменационные билет.tex" />
+			</fileset>
+		</latex>
+		<copy tofile="${tcp.output.path}/08 Экзаменационные билеты.pdf" file="${tcp.source.path}/exam/ТВП-Экзаменационные билет.pdf"/>
+		<delete>
+			<fileset dir="${tcp.source.path}/exam">
+				<include name="*.dvi" />
+				<include name="*.pdf" />
+			</fileset>
+		</delete>
+	</target>
+</project>

@@ -1,0 +1,317 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Сортировка. Часть №2.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка с разделением (быстрая сортировка)}
+	
+\begin{enumerate}
+	\item Разделяем массив на два подмассива $\left[ 1 \ldots m \right]$ и $\left[ m + 1 \ldots N \right]$, 
+	причем $\forall i,j: 1 \leq i \leq m \wedge m < j \leq N \Rightarrow a_i \leq a_j$
+	\item Рекурсивно сортируем получившиеся два подмассива.
+\end{enumerate}
+
+$m$ называется медианой.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм быстрой сортировки}
+
+	\begin{codebox}
+	\Procname{$\proc{QuickSort}(A, p, r)$}
+	\li \If $p < r$
+	\li \Then	$q \gets Partition(A, p, r)$
+	\li $Quicksort(A, p, q - 1)$
+	\li $Quicksort(A, q + 1, r)$
+	\End
+	\end{codebox}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм разделения в быстрой сортировке}
+
+	\begin{codebox}
+		\Procname{$\proc{Partition}(A, p, r)$}
+		\li $x \gets A[r]$
+		\li $i \gets p - 1$
+		\li for $j \gets p$ \To $r - 1$
+		\li \Do \If $A[i] \leq x$
+		\li 	\Then	$i \gets i + 1$
+		\li 		Обменять $A[i] \leftrightarrow A[j]$
+					\End 
+				\End
+		\li Обменять $A[i + 1] \leftrightarrow A[r]$
+		\li \Return $i + 1$
+		\End
+	\end{codebox}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм быстрой сортировки на С}
+
+	\includegraphics[width=0.5\textwidth]{content/sorting/quicksort_list.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Работа быстрой сортировки (1 из 2)}
+
+	\includegraphics[width=1\textwidth]{content/sorting/quicksort_work1.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Работа быстрой сортировки (2 из 2)}
+
+	\includegraphics[width=0.7\textwidth]{content/sorting/quicksort_work2.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ быстрой сортировки (наихудший случай)}
+	
+	Предположим, что все элементы различны.
+	
+	Наихудший случай: когда при разделении один из массивов не имеет элементов.
+	
+	$\begin{array} {lcl} 
+		T(n) & = & T(0) + T(n-1) + \Theta(n) \\ & = & \Theta(1) + T(n-1) + \Theta(n) \\ & = & T(n-1) + \Theta(n) \\ & = & \Theta(n^2)
+	\end{array}$
+	
+	
+	$C(N) = M(N)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ быстрой сортировки (наихудший случай)}
+	
+	\includegraphics[width=0.7\textwidth]{content/sorting/quicksort_tree.png}
+	
+	$\displaystyle T(n) = \Theta(\sum_{k=1}^n{c\cdot k}) + n \cdot \Theta(1) = \Theta(n^2 + n) = \Theta(n^2)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ быстрой сортировки (наилучший случай)}
+	
+	Наилудший случай: когда при разделении массив разделяется на равные части.
+	
+	$\begin{array} {lcl} 
+		T(n) & = & 2T(n/2) + \Theta(n) \\ & = & \Theta(n \cdot log(n))
+	\end{array}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Рандомизированная быстрая сортировка}
+	
+	\begin{itemize}
+		\item Время работы не зависит от порядка элементов во входных данных.
+		\item Не нужно предположений о распределении входных данных.
+		\item Нет входных данных, которые приводят к наихудшему случаю.
+		\item Наихудший случай определяется только генератором случайных чисел.
+	\end{itemize}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Рандомизированная быстрая сортировка}
+	
+	Выбираем граничный элемент случайным образом!
+
+	\begin{codebox}
+		\Procname{$\proc{RandomizedPartition}(A, p, r)$}
+		\li $i \gets Random(p,r)$
+		\li	Обменять $A[r] \leftrightarrow A[i]$
+		\li \Return $Partition(A,p,r)$
+		\End
+	\end{codebox}
+
+	\begin{codebox}
+	\Procname{$\proc{RandomizedQuickSort}(A, p, r)$}
+	\li \If $p < r$
+	\li \Then	$q \gets RandomizedPartition(A, p, r)$
+	\li $RandomizedQuicksort(A, p, q - 1)$
+	\li $RandomizedQuicksort(A, q + 1, r)$
+	\End
+	\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ рандомизированной быстрой сортировки}
+	
+	$T(n) = $ функция имеющая случайный характер. Пусть выбор элемента разделения осуществляется независимым образом.
+	
+	Введем случайный индикатор: $X_k = \begin{cases} 1,& \mbox{разделение} (k:n-k-1) \\ 0, & \mbox{иначе} \end{cases}$
+	
+	$E[X_k] = 0 \cdot Pr\left\{X_k=0\right\} + 1 \cdot Pr\left\{X_k=1\right\} = Pr\left\{X_k=1\right\} = \frac{1}{n}$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ рандомизированной быстрой сортировки}
+	
+	$T(n) = 
+		\begin{cases}
+			T(0) + T(n-1) + \Theta(n), & \mbox{разделение} (0:n-1) \\ 
+			T(1) + T(n-2) + \Theta(n), & \mbox{разделение} (1:n-2) \\ 
+			\ldots &  \\ 
+			T(n-1) + T(0) + \Theta(n), & \mbox{разделение} (n-1:0) \\ 
+		\end{cases}$	
+	
+	$=\displaystyle\sum_{k=0}^{n-1}{X_k(T(k)+T(n-k-1)+\Theta(n))}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ рандомизированной быстрой сортировки}
+	
+	$\begin{array}{lcl} 
+		E[T(n)] & = & \displaystyle E[\sum_{k=0}^{n-1}{X_k(T(k)+T(n-k-1)+\Theta(n))}] \\ 
+		& = & \displaystyle E[X_k] \cdot E[\sum_{k=0}^{n-1}{T(k)+T(n-k-1)+\Theta(n))}] \\
+		& = & \displaystyle \frac{1}{n}\sum_{k=0}^{n-1}{E[T(k)]} + \frac{1}{n}\sum_{k=0}^{n-1}{E[T(n-k-1)]} + \frac{1}{n}\sum_{k=0}^{n-1}{\Theta(n)} \\
+		& = & \displaystyle \frac{2}{n}\sum_{k=0}^{n-1}{E[T(k)]} + \Theta(n) \\
+		& = & \displaystyle \frac{2}{n}\sum_{k=2}^{n-1}{E[T(k)]} + \Theta(n) \\
+	\end{array}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ рандомизированной быстрой сортировки}
+
+	\textbf{Докажем}, что $E[T(n)] \leq a \cdot n \cdot log(n)$, для $a - const, a > 0$.
+	
+	\textbf{Базовый шаг: выберем} $a$, что $E[T(n)] \leq a \cdot n \cdot log(n)$ для малого n. 
+	
+	\textbf{Используем факт}, что $\displaystyle\sum_{k=2}^{n-1}{k \cdot log (k)} \leq \frac{1}{2}n^2 log(n) - \frac{1}{8}n^2$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ рандомизированной быстрой сортировки}
+
+	\textbf{Подстановка:}
+	 
+	$\begin{array}{lcl} 
+		E[T(n)] & \leq & \displaystyle \frac{2}{n}\sum_{k=2}^{n-1}{a \cdot k \cdot log(k)} + \Theta(n) \\ 
+		& \leq & \displaystyle \frac{2a}{n}(\frac{1}{2}n^2 log(n) - \frac{1}{8}n^2) + \Theta(n) \\
+		& = & \displaystyle a \cdot n \cdot log(n) - (\frac{a \cdot n}{4} - \Theta(n)) \\
+		& \leq & \displaystyle a \cdot n \cdot log(n), \mbox{если} \frac{a \cdot n}{4} > \Theta(n)
+	\end{array}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Наименьшее время сортировки}
+
+	\textbf{Теорема.} В любом алгоритме, упорядочивающем с помощью сравнения пар, 
+	на упорядочивание последовательности из $N$ элементов тратится не меньше 
+	$c \cdot N \cdot log_2N$ сравнений при $c=0$ и $N\rightarrow\infty$.
+	
+	$T(n) > c \cdot N \cdot log_2N$, при $c=0$ и $N\rightarrow\infty$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Наименьшее время сортировки. Доказательство}
+
+	Число перестановок последовательности из $N$ элементов равно $N!$.
+	
+	Сортировка путем сравнения пар есть спуск по дереву решений - двоичному, где листья перестановки, а внутренние узлы условия.
+	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево решений сортировки для последовательности из 3-х элементов}
+
+	\includegraphics[width=0.8\textwidth]{content/sorting/sort_decision_tree.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Наименьшее время сортировки. Доказательство}
+
+	$N! \geq \left(\frac{N}{2}^\frac{N}{2}\right)$
+	
+	$h \geq log_2(N!) \geq \frac{N}{2}log_2\frac{N}{2} \geq \frac{N}{4}log_2N$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка за линейное время. Сортировка подсчетом}
+	
+\begin{itemize}
+	\item Все $n$ входных элементов - целые числа, пренадлежащие $[0,k]$, где $k$ - целая константа.
+	\item Если $k=O(n)$, то $T(n)=\Theta(n)$
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка подсчетом}
+	
+	\begin{codebox}
+		\Procname{$\proc{CountingSort}(A, B, k)$}
+		\li \For $i \gets 0$ \To $k$
+		\li		\Do $C[i] \gets 0$ \End
+		\li \For $j \gets 1$ \To $length[A]$
+		\li		\Do $C[A[j]] \gets C[A[j]]+1$ \End
+		\li \Comment В $C[i]$ хранится количество элементов равных $i$
+		\li \For $i \gets 1$ \To $k$
+		\li		\Do $C[i] \gets C[i]+C[i-1]$ \End
+		\li \Comment В $C[i]$ хранится количество элементов не превышающих $i$
+		\li \For $j \gets length[A]$ \Downto $1$
+		\li		\Do $B[C[A[j]]] \gets A[j]$
+		\li		 $C[A[j]] \gets C[A[j]]-1$ \End
+		\End
+	\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка подсчетом}
+
+	\includegraphics[width=1\textwidth]{content/sorting/counting_sort_ex.png}
+	
+	Визуализация?
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка за линейное время}
+
+	На семинар:
+	
+	\begin{itemize}
+		\item Поразрядная сортировка
+		\item Карманная сортировка
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Цикова В.А., Чурина Т.Г. Методы программирования: перестановки, поиск и сортировка: Учеб. пособие / Новосиб. гос. ун-т. Новосибирск, 2006. Ч.2. 58 с. \textbf{сс.42-47}.
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.235-257}.
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.198-239}.
+	\item Кнут Д, Искусство программирования, том 3. Сортировка и поиск, 2-е изд. - М. : Издательский дома ``Вильямс'', 2000. \textbf{сс.192-203}.
+\end{itemize}
+\end{slide}
+

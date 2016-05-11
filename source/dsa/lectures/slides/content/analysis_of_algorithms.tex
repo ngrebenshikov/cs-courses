@@ -1,0 +1,257 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Анализ алгоритмов}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритмов} - теоретическое исследование производительности компьютерных программ и потребляемых ими ресурсов.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+		Что важнее, чем производительность?
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\begin{itemize}
+		\item Правильность
+		\item Удобство и простота использования
+		\item Простота поддержки (простая архитектура)
+		\item Безопасность
+		\item Расширяемость
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+		Зачем исследовать алгоритмы и производительность?
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+		\textbf{Производительность} - это капитал, который тратится на функции программы.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+		\textbf{Задача: Cортировка}
+		
+		\textbf{Дано:} последовательность чисел $<a_1,a_2,...,a_n>$
+		
+		\textbf{Найти:} перестановку $<a_1',a_2',...,a_n'>$, что $a_1' \leq a_2' \leq ,..., \leq a_n'$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{codebox}
+\Procname{$\proc{Insertion-Sort}(A, n)$}
+\li \For $j \gets 2$ \To $\id{n}$
+\li \Do
+$\id{key} \gets A[j]$
+\li \Comment Insert $A[j]$ into the sorted sequence
+$A[1 \twodots j-1]$.
+\li $i \gets j-1$
+\li \While $i > 0$ and $A[i] > \id{key}$
+\li \Do
+$A[i+1] \gets A[i]$
+\li $i \gets i-1$
+\End
+\li $A[i+1] \gets \id{key}$
+\End
+\end{codebox}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\includegraphics[width=1\textwidth]{content/analysis_of_algorithms/ins_sort.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Пример работы сортировки методом вставок}
+	\begin{tabular}[t]{|c c c c c c|}
+			\hline 9 & \textbf{(1)} & 5 & 7 & 3 & 2 \\
+			\hline 1 & 9 & \textbf{(5)} & 7 & 3 & 2 \\
+			\hline 1 & 5 & 9 & \textbf{(7)} & 3 & 2 \\
+			\hline 1 & 5 & 7 & 9 & \textbf{(3)} & 2 \\
+			\hline 1 & 3 & 5 & 7 & 9 & \textbf{(2)} \\
+			\hline 1 & 2 & 3 & 5 & 7 & 9 \\	\hline
+	\end{tabular}
+\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Время работы}
+\begin{itemize}
+	\item зависит от входных данных (например, отсортированный массив)
+	\item зависит от размера входных данных
+	\item необходимо знать верхнюю границу (гарантия)
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Виды анализа}
+\begin{itemize}
+	\item Наихудший случай: $T(n)$ - максимальное время для любых входных данных размера $n$.
+	\item Средний случай: $T(n)$ - ожидаемое время для любых входных данных размера $n$. (Необходимо допущение???)
+	\item Наилучший случай - надувательство.
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Время работы InsertionSort в наихудшем случае?}
+
+Зависит от компьютеров
+\begin{itemize}
+	\item относительная скорость (одна и та же машина)
+	\item абсолютная скорость (разные машины)
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Решение: Асимптотический анализ}
+\begin{itemize}
+	\item Игнорировать влияние компьютера на время работы алгоритма
+	\item Исследовать рост $T(n)$ при $n \rightarrow \infty$
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Асимптотическия нотация}
+\begin{itemize}
+	\item $\Theta$-нотация. Отбросить менее значимые части формулы и коэффициенты.\newline
+				$4n^3+12n^2-10n+1234=\Theta(n^3)$
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Сравнение алгоритмов $\Theta(n^3)$ и $\Theta(n^2)$}
+
+	\includegraphics[width=0.8\textwidth]{content/analysis_of_algorithms/x2_x3.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ: сортировки вставками}
+	
+	Наихудший случай: входные данные отсортированны в обратном порядке.
+	
+	$\displaystyle T(n)=\sum_{2}^n \Theta(n)=\Theta(n^2)$ (арифметическая прогрессия)
+	
+	Быстра ли данная сортировка?
+	
+	\begin{itemize}
+		\item Да, для малых $n$
+		\item Нет, для больших $n$
+	\end{itemize}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сортировка слиянием $A[1 .. n]$}
+	
+	\begin{enumerate}
+		\item Если $n=1$, то конец.
+		\item Рекурсивно сортируем $A[1 .. \left\lceil n/2\right\rceil]$ и $A[\left\lceil n/2\right\rceil+1 .. n]$.
+		\item Слияние отсортированных массивов.
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример слияния отсортированных массивов?}
+	
+	$T(n)=\Theta(n)$, где $n$ - общее число элементов	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{$T(n)$} - Сортировка слиянием $A[1 .. n]$
+	
+	\begin{enumerate}
+		\item \textbf{$\Theta(1)$} - Если $n=1$, то конец.
+		\item \textbf{$2T(n/2)$} - Рекурсивно сортируем $A[1 .. \left\lceil n/2\right\rceil]$ и $A[\left\lceil n/2\right\rceil+1 .. n]$.
+		\item \textbf{$\Theta(n)$} - Слияние отсортированных массивов.
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Рекурсия}
+
+	$\displaystyle 
+	T(n) = \left\{ \begin{array}{ll}
+         \Theta(1) & \mbox{n=1};\\
+        2T(n/2)+\Theta(n) & \mbox{n>1}.\end{array} \right.$
+        
+  Дерево рекурсии: $T(n) = 2T(n/2) + cn, c - const, c > 0$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево рекурсии}
+	
+  Дерево рекурсии: $T(n) = 2T(n/2) + cn, c - const, c > 0$
+
+	\includegraphics[width=1\textwidth]{content/analysis_of_algorithms/merge_tree.pdf}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево рекурсии}
+
+	\includegraphics[width=1\textwidth]{content/analysis_of_algorithms/merge_tree1.pdf}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево рекурсии}
+
+	\includegraphics[width=1\textwidth]{content/analysis_of_algorithms/merge_tree2.pdf}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево рекурсии}
+
+	\includegraphics[width=0.8\textwidth]{content/analysis_of_algorithms/merge_tree3.pdf}
+	
+	$T(n) = cn \cdot log_2(n) + \Theta(n) = 
+				\Theta(n) \cdot log_2(n) + \Theta(n) = 
+				\Theta(n \cdot log_2(n)+ n) = 
+				\Theta(n \cdot log_2(n))$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сравнение алгоритмов сортировки}
+	
+	\begin{itemize}
+		\item Сортировка вставками - $\Theta(n^2)$
+		\item Сортировка слиянием - $\Theta(n * log_2(n))$
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.27-36}.
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.11-15}.
+\end{itemize}
+\end{slide}

@@ -1,0 +1,295 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Моделирование с помощью сетей Петри.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование и сети Петри}
+	
+	Для моделирования событий в системе.
+
+	Классы систем:
+	\begin{itemize}
+		\item аппаратное обеспечение ЭВМ;
+		\item программное обеспечение ЭВМ;
+		\item физические системы;
+		\item социальные системы.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{События и условия}
+	
+	\textit{Событие} - дейстие, имеющее место в системе.
+	
+	\textit{Состояние системы} - множество условий.
+	
+	\textit{Условие} - предикат или логическое описание состояния системы.
+	
+	\textit{Предусловия события} - условия необходимые для того, чтобы событие могло произойти.
+	
+	\textit{Постусловия} - условия, к которым приводит событие.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. Автомат-продавец}
+
+	\textit{Условия:} \textbf{а)} ждет, \textbf{б)} заказ прибыл и ждет, \textbf{в)} автомат выполняет заказ, \textbf{г)} заказ выполнен.
+	
+	\textit{События:} \textbf{1.} Заказ поступил. \textbf{2.} Автомат начинает выполнять заказ. \textbf{3.} Автомат заканчивает выполнение заказа. \textbf{4.} Заказ доставляется.
+	
+		\begin{center}
+		\includegraphics[height=0.3\textheight]{content/petri_nets/modeling_conditions.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. Автомат-продавец}
+	
+	Условия - позиции.
+	
+	События - переходы.
+
+	\begin{center}
+		\includegraphics[height=0.6\textheight]{content/petri_nets/modeling_trader.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. Вычислительная система}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_processing_system.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Особенности сетей Петри}
+	
+\begin{itemize}
+	\item параллелизм;
+	\item асинхронность (отсутствует течение (измерение) времени);
+	\item недетерминированность;
+	\item мгновенность и неодновременность событий (примитивность событий);
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Непримитивные события} - события, длительность которых не равна нулю, и могут пересекаться во времени.
+	
+	Представляется в виде двух примитивных событий: начало и конец события.
+	
+	\begin{center}
+		\includegraphics[height=0.6\textheight]{content/petri_nets/modeling_nonprimitive.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Непримитивные события}
+	
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_nonprimitive1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Одновременность и конфликт}
+	
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_conflict.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование аппаратного обеспечения}
+	
+\begin{itemize}
+	\item элементарный уровень (простые устройства памяти, вентили);
+	\item высокий уровень (функциональные элементы, регистры);
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Модель \textbf{элементарный уровеня аппаратного обеспечения} может быть простроена на основе \textit{конечных автоматов}.
+	
+	\begin{center}
+		\includegraphics[height=0.7\textheight]{content/petri_nets/modeling_definite_automata.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_definite_automata1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дополнение бинарного числа до двух}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_definite_automata2.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проверка четности}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_definite_automata3.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{В чем приемущество сетей Петри?}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Композиция}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_composition.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Композиция}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_composition1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование устройства управления для ЭВМ}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_registers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование программного обеспечения}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_block_scheme.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Преобразование блок-схем в сети Петри}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_block_scheme_transforming.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Преобразование блок-схем в сети Петри}
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/petri_nets/modeling_block_scheme_transformed.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование параллелизма}
+	\begin{center}
+		\includegraphics[height=0.7\textheight]{content/petri_nets/modeling_parallel.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование взаимного исключения}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_mutex.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример. Светофор}
+	\begin{center}
+		\includegraphics[height=0.7\textheight]{content/petri_nets/traffic_lights.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача производителя и потребителя}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_producer_consumer.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача об обедающих философах. Будет ли тупик?}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_dining_philosophers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача о читателях и писателях не может быть смоделирована с помощью \textit{обычной} сетью Петри}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_readers_writers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование семафора}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_semaphor.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование процессов. PERT-диаграмма}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_pert.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сеть Петри для PERT-диаграммы}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_pert1.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Моделирование химических реакций}
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/petri_nets/modeling_chemistry.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Питерсон, Дж., Теория сете Петри и моделирование систем - М.: Мир, 1984. - \textbf{сc.36-78}
+	\item Котов, В.Е., Сети Петри. - М.: Наука, 1984.
+\end{itemize}
+\end{slide}

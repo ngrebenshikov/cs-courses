@@ -1,0 +1,272 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Графы: представление, обходы, топологическая сортировка.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Области применения графов}
+	\begin{itemize}
+		\item Сети (коммуникации и транспортировки)
+		\item Компоновка элементов на интегральной схеме
+		\item 3D (Сеть поверхности) и геоинформационные системы
+		\item Календарное планирование (Зависимости между событиями)
+		\item \textbf{Везде, где есть множество объектов и какая-то ``связь'' между парами объектов.}
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Ориентированный граф} $G=(V,E)$ состоит из конечного множества вершин $V$ и множества упорядоченных пар вершин $E$, называемых ребрами.
+	
+	\textbf{Неориентированный граф} $G=(V,E)$ состоит из конечного множества вершин $V$ и множества \textbf{не}упорядоченных пар вершин $E$, называемых ребрами.
+	
+	Вершина $v$ является \textbf{смежной} вершине $u$, если $\exists$ ребро $(u,v)$.
+	
+	\textbf{Степень вершины} сумма ребер выходяших из данной вершины.
+
+	\textbf{Степень графа} максимальная степень его вершин.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Пусть $G$ - ориентированный граф и $\left|V\right| = n$, тогда $ \leq E \leq n^2$ и $\displaystyle\sum_{v \in V}{deg(v)} = E$
+	
+	\textbf{Путь в графе} - последовательность $\left\langle v_0, v_1, \ldots ,v_k\right\rangle$, где $(v_{i-1}, v_i)$ является ребром для $i=1,2,\ldots,k$.
+	
+	\textbf{Длина пути} - количество ребер и равна $k$.
+	
+	\textbf{Цикл} - это путь, длина которого больше нуля и $v_0 = v_k$. \textbf{Ацикличный граф} - граф без циклов.
+	
+	\textbf{Свободное дерево} - связный ацикличный граф. \textbf{Лес деревьев} - несвязный ацикличный граф.
+	
+	\textbf{DAG - directed acyclic graph.}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Иллюстрация}
+
+	\includegraphics[width=1\textwidth]{content/graphs/graph_terms.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АТД Граф}
+	
+\begin{lstlisting}[emph={NodeInfo, Cleared, Checked, data, checked, group, Graph, addArc, addSingleNode, getNodesCount, dfs, floyd, getMinimalPath, getNodeInfo},emphstyle=\underbar]
+	public class NodeInfo {
+		public static final int Cleared = 0;
+		public static final int Checked = 1;
+		public int data;
+		public int checked;
+		public int group = 0;
+		
+		public NodeInfo(int data) {
+			this.data = data;
+			checked = Cleared;
+		}
+	}
+\end{lstlisting}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АТД Граф}
+	
+\begin{lstlisting}[emph={NodeInfo, Cleared, Checked, data, checked, group, Graph, addArc, addSingleNode, getNodesCount, dfs, floyd, getMinimalPath, getNodeInfo},emphstyle=\underbar]
+class Graph {
+	public Graph(int maxNodesCount);
+	public void addArc(int from, int to, int data);
+	public void addSingleNode(int node);
+	public int getNodesCount();
+	public int dfs(Action<Integer> action);
+	public void floyd();
+	public int getMinimalPath(int from, int to);
+	public NodeInfo getNodeInfo(int node);
+}
+\end{lstlisting}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Представление графа. Матрица смежности}
+	
+	Пусть $G=(V,E)$ - орграф  с $n=|V|$ вершин и $e=|E|$ ребер. Пусть вершины пронумерованы $\left\{1,2,\ldots , n\right\}$
+	
+	Тогда $n\times n$ матрица $A[v,w] = \begin{cases} 1, & \mbox{если } (v,w) \in E \\ 0, & \mbox{иначе} \end{cases}$ является матрицей смежности.
+	
+	Если граф взвешенный, то если $(v,w) \in E \Rightarrow A[v,w] = W(v,w)$. Специальные случаи, когда $A[v,w]=-1,\infty$.
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Матрица и список смежности для орграфа}
+
+	\includegraphics[width=1\textwidth]{content/graphs/adjacency_matrix_digraph.png}	
+	
+	Количество ячеек в матрице: $\Theta(V^2)$ - \textbf{выгодно для плотных графов.}
+	
+	Количество ячеек в списке: $\Theta(V+E)$ - \textbf{выгодно для разреженных графов.}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Матрица и список смежности для неориентированного графа}
+
+	\includegraphics[width=1\textwidth]{content/graphs/adjacency_matrix.png}	
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход графа}
+
+	\begin{itemize}
+		\item Обход в ширину (Поиск расстояния от одной вершины до другой в невзвешенном графе)
+		\item Обход в глубину (Построение леса)
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход графа в ширину. Алгоритм}
+
+	\includegraphics[width=0.9\textwidth]{content/graphs/bfs_listing.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход графа в ширину. Пример}
+
+	\includegraphics[width=0.7\textwidth]{content/graphs/bfs_example.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритма обхода в ширину}
+	
+	$\displaystyle\begin{array} {lcl} 
+		T(V) & = & \displaystyle V + \sum_{u \in V}{deg(u)+1} 
+		\\ & = & \displaystyle V + \sum_{u \in V}{deg(u)} + V
+		\\ & = & 2V + E
+		\\ & = & \Theta(V+E)
+	\end{array}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход графа в глубину. Алгоритм}
+
+	\includegraphics[width=0.9\textwidth]{content/graphs/dfs_listing.png}	
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход графа в глубину. Пример}
+
+	\includegraphics[width=0.8\textwidth]{content/graphs/dfs_example.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Анализ алгоритма обхода в глубину}
+	
+	$\displaystyle\begin{array} {lcl} 
+		T(V) & = & \displaystyle V + \sum_{u \in V}{deg(u)+1} 
+		\\ & = & \displaystyle V + \sum_{u \in V}{deg(u)} + V
+		\\ & = & 2V + E
+		\\ & = & \Theta(V+E)
+	\end{array}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Древовидная структура после обхода в глубину}
+	
+	\textbf{Обратное ребро} - $(u,v)$, где $v$ - предок $v$.
+	
+	\textbf{Прямое ребро} - $(u,v)$, где $v$ - потомок $v$.
+	
+	\textbf{Ребро пересечения} - $(u,v)$, где $v$ - не потомок и не предок $v$. $(u,v)$ - ребро между разными деревьями.
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Интервальная структура после обхода в глубину.}
+	
+	Дано $G=(V,E)$, дерево DFS для G и любые две вершины $u,v \in V$.
+	
+	
+	\begin{itemize}
+		\item $u$ - потомок $v \Longleftrightarrow [d[u], f[u]] \subseteq [d[v], f[v]]$
+		\item $u$ - предок $v \Longleftrightarrow [d[u], f[u]] \supseteq [d[v], f[v]]$
+		\item $u$ и $v$ не связаны друг с другом $\Longleftrightarrow [d[u], f[u]]$ и $[d[v], f[v]]$ не пересекаются.
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Интервальная структура после обхода в глубину}
+
+	\includegraphics[width=0.8\textwidth]{content/graphs/dfs_intervals.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Обход в глубину и циклы}
+	
+	Граф имеет цикл тогда и только тогда, когда DFS-дерево имеет обратное ребро.
+	
+	\textbf{Доказательство на семинар.}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Топологическая сортировка}
+	
+	DAG используется для описания ограничений предшествования и порядка. В \textbf{графе предшествования} каждое ребро $(u,v)$ означает, что $u$ предшествует $v$.
+	
+	\textbf{Топологическая сортировка} графа есть построение последовательности $a$, где для всех $a_i$ и $a_j$ выполняется $\exists (a_i,a_j) \Rightarrow i < j$.
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Топологическая сортировка}
+	
+	\includegraphics[width=0.6\textwidth]{content/graphs/topsort_example1.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Топологическая сортировка}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/topsort_example2.png}	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Топологическая сортировка}
+	
+	\includegraphics[width=1\textwidth]{content/graphs/topsort_listing.png}	
+	
+	$T(n) = \Theta(V + E)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item David M. Mount, The Lecture notes: Design and Analysis of Computer Algorithms. [Электронный ресурс] / Dept. of Computer Science, University of Maryland, 2004. - Режим доступа: http://www.cs.umd.edu/~mount/451/Lects/451lects.pdf . - \textbf{сс.30-38}
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.609-634}.
+\end{itemize}
+\end{slide}
+

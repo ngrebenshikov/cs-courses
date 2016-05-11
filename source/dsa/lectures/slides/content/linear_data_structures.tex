@@ -1,0 +1,363 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Линейные структуры данных}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Линейное представление - простейшее представление множества элементов.
+
+	$\{a,b,c,d,e\} \rightarrow (a,b,c,d,e)$
+	
+	Задачи:
+		\begin{itemize}
+			\item Информационный поиск
+			\item Трансляция программных языков
+			\item Моделирование
+			\item и т.д.
+		\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Последовательность} - это упорядоченный список элементов некоторого множества.
+
+	Пусть дано множество $X$. Тогда конечной последовательностью его элементов называют функцию $n \mapsto x(n),\; n\in \{1,\ldots,N\},x(n)\in X.$ Элемент $x(n)$ называют членом последовательности с номером $n$, а натуральное число $N\in \mathbb{N}$ называется их общим количеством.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{АТД ``Список''}
+\begin{lstlisting}[frame=single,emph={insert,getPosition, getAt, deleteAt, next, previous, end, first, clear},emphstyle=\underbar]
+interface List {
+	void insert(object o, Position position);
+	Position getPosition(object o);
+	object getAt(Position position);
+	void deleteAt(Position position);
+	Position next(Position position);
+	Position previous(Position position);
+	Position end();
+	Position first();
+	void clear();
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Реализация списка с помощью массива}
+
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/list_array.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация списка с помощью массива}
+
+\begin{lstlisting}[frame=single,emph={MAX_COUNT, objects, last, end},emphstyle=\underbar]
+class ArrayList {
+	private final int MAX_COUNT = 1000;
+	private Object[] objects = new Object[MAX_COUNT];
+	private int last = 0; 
+	int end() {
+		return last + 1;
+	}
+}
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация списка с помощью массива}
+
+\begin{lstlisting}[frame=single,emph={insert,getPosition, getAt, deleteAt, next, previous, end, first, clear},emphstyle=\underbar]
+void insert(object o, int position) {
+	int q;
+	if (last >= MAX_COUNT) { error(``Список полон''); }
+	else if (position > last || p < 0) { 
+		error(``Позиция не существует''); 
+	}	else {
+		for (int i = last; i >= p; i--) {
+			objects[i+1] = object[i];
+		}
+		last++;
+		objects[p] = o;
+	}
+}
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Реализация списка с помощью указателей}
+
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/list_pointer.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация списка с помощью указателей}
+
+\begin{lstlisting}[frame=single,emph={PointerListElement, PointerList end},emphstyle=\underbar]
+class PointerListElement {
+	public object data =  null;
+	public PointerListElement next =  null;
+}
+class PointerList {
+	private PointerListElement head = 
+			new PointerListElement();
+	PointerListElement end() {
+		PointerListElement result = head;
+		while(result.next != null) {
+			result = result.next;
+		}
+		return result
+	}
+}
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация списка с помощью указателей}
+
+\begin{lstlisting}[frame=single,emph={PointerListElement, PointerList end},emphstyle=\underbar]
+void insert(object o, PointerListElement position) {
+	PointerListElement newElement = 
+			new PointerListElement();
+	newElement.data = o;
+	newElement.next = position.next;
+	position.next = newElement;
+}
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Реализация списка с помощью указателей: Вставка}
+
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/list_pointer_insert.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Реализация списка с помощью указателей: Удаление}
+
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/list_pointer_delete.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Дважды связанный список}
+
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/list_pointer_twice.png}
+\end{center}
+
+\emph{ }
+
+\begin{lstlisting}[frame=single,emph={PointerListElement, PointerList end},emphstyle=\underbar]
+class PointerListElement {
+	public object data =  null;
+	public PointerListElement next =  null;
+	public PointerListElement previous =  null;
+}
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Стек}
+
+\includegraphics[height=0.8\textheight]{content/linear_structures_imgs/stacked_books.jpg}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Стек} - это специальный тип списка, в котором все вставки и удаления выполняются только на одном конце, называемом \textit{вершиной}.
+	
+	\textbf{LIFO} - last in first out.
+	
+	\textbf{АТД ``Стек''}
+	\begin{lstlisting}[frame=single,emph={Stack, push, pop, top,isEmpty, clear},emphstyle=\underbar]
+	interface Stack {
+		void push(object o);
+		object pop();
+		object top();
+		boolean isEmpty();
+		void clear();
+	}
+	\end{lstlisting}
+	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\textbf{Реализация стека с помощью массива}
+
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/stack.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{lstlisting}[frame=single,emph={ArrayStack, push, top,isEmpty, MAX_COUNT},emphstyle=\underbar]
+class ArrayStack {
+	private final int MAX_COUNT = 1000;
+	private Object[] objects = new Object[MAX_COUNT];
+	private int top = MAX_COUNT;
+	void push(object o) {
+		if (top <= 0) { error(``Стек полон''); }
+		else { 
+			top--;
+			objects[top] = o;
+		}
+	}
+	.
+	.
+	.
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Очередь} - это специальный тип списка, в котором все вставки выполняются с одного конца, а удаления с другого.
+	
+	\textbf{FIFO} - first in first out.
+	
+	\textbf{АТД ``Очередь''}
+	\begin{lstlisting}[frame=single,emph={Queue, push, pop, top,isEmpty, clear},emphstyle=\underbar]
+	interface Queue {
+		void enqueue(object o);
+		object dequeue();
+		object front();
+		boolean isEmpty();
+		void clear();
+	}
+	\end{lstlisting}
+	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация очереди с помощью указателей}
+\begin{lstlisting}[frame=single,emph={PointerListElement, PointerQueue, enqueue, isEmpty},emphstyle=\underbar]
+class PointerQueue {
+	PointerListElement front, rear;
+	void enqueue(object o) {
+		PointerListElement newElement = 
+				new PointerListElement();
+		newElement.data = o;
+		newElement.next = null;
+		rear.next = newElement;
+		rear = newElement;
+	}
+	void isEmpty() {
+		return front == rear;
+	}
+}
+\end{lstlisting}
+	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\begin{center}
+\includegraphics[height=1\textheight]{content/linear_structures_imgs/queue_pointer_ops.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация очереди с помощью циклического массива}
+
+\begin{center}
+\includegraphics[width=1\textwidth]{content/linear_structures_imgs/queue_array.png}
+\end{center}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Реализация очереди с помощью циклического массива}
+\begin{lstlisting}[frame=single,emph={ArrayQueue, MAX_COUNT, enqueue, isEmpty},emphstyle=\underbar]
+class ArrayQueue {
+	private final int MAX_COUNT = 1000;
+	private Object[] objects = new Object[MAX_COUNT];
+	int front = 0, rear = MAX_COUNT - 1;
+	void enqueue(Object o) {
+		if ((rear + 2) % MAX_COUNT == front) { 
+			error(``Очередь полная'');
+		} else {
+			rear = (rear + 1) % MAX_COUNT;
+			objects[rear] = o;
+		}
+	}
+	void isEmpty() {
+		return (rear + 1) % MAX_COUNT == front;
+	}
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Отображение} - это функция определенная на множестве элементов (области определения) одного типа, и принимающая значения из множества элементов (области значений) другого типа.
+
+\textbf{ }
+
+\begin{lstlisting}[frame=single,emph={Map, clear, set, get},emphstyle=\underbar]
+interface Map {
+	void clear();
+	void set(Object index, Object value);
+	void get(Object index);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single,emph={Map, clear, set, get},emphstyle=\underbar]
+Map map = new Map();
+String s1 = ``abc'', s2 = ``zxc'';
+map.set(s1, s2);
+map.get(s1) => ?
+\end{lstlisting}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.45-76}.
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.260-268}.
+	\item Кнут Д, Искусство программирования, том 1. Основные алгоритмы, 3-е изд. - М. : Издательский дома ``Вильямс'', 2000. \textbf{сс.277-351}.
+\end{itemize}
+\end{slide}

@@ -1,0 +1,280 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Теория вычислительных процессов\newline
+\title{Лекция: Совместное использование ресурсов несколькими процессами - 2.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Модель операционной системы}
+	
+	$\alpha JOB = \{cr.right, lp.left, \tick\}$
+	
+	$JOB1 = (cr: CRH \enslave lp : LPH \enslave JOB)$
+	
+	$BATCH0 = (cr: CRH \enslave lp : LPH \enslave JOB)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Модель операционной системы}
+	
+	$JOBS = ^*((cr.acquire \then lp.acqire \then JOB) ; (cr.release \then lp.release \then \SKIP))$
+	
+	$BATCH1 = (cr: CRH \enslave lp : LPH \enslave JOBS)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Модель операционной системы с буферами}
+	
+	$OPSYS1 = insys : INSPOOL \enslave outsys : OUTSPOOL \enslave BATCH$
+	
+	$BATCH = ^*(cr :: insys \enslave lp :: outsys \enslave JOB)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Система вывода с буфером. Виртуальный принтер}
+	
+	$VLPS = \parallel_{i \geq 0} i : (acuire \then VLP)$
+
+	$OUTSPOOL = (\Nats : (lp : LP2) \enslave VLPS)$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Многопроцессорная операционная система}
+
+	$OPSYS = insys : INSPOOL \enslave outsys: OUTSPOOL \enslave BATCH4$
+	
+	$BATCH4 = (\parallel_{i < 4}BATCH)$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблемы межпроцессного взаимодействия}
+
+\begin{itemize}
+	\item Состояние состязания
+	\item Взаимное исключение
+	\item Проблема производителя и потребителя
+	\item Проблема обедающих философов
+	\item Проблема читателей и писателей
+	\item Проблема спящего брадобрея
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Состояние состязания}
+
+	\begin{center}
+		\includegraphics[height=0.8\textheight]{content/shared_resources/competition_state.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Взаимное исключение (критические области)}
+
+	\begin{center}
+		\includegraphics[width=1\textwidth]{content/shared_resources/critical_sections.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Взаимное исключение (активное ожидание)}
+
+	\begin{itemize}
+		\item Запрещение прерываний
+		\item Переменные блокировки
+		\item Строгое чередование
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример спин-блокировки (spin-lock)}
+
+	\begin{center}
+		\includegraphics[width=1\textwidth]{content/shared_resources/spin_lock.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм Петерсона}
+
+	\begin{center}
+		\includegraphics[width=1\textwidth]{content/shared_resources/peterson.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Команда TSL (Test and Set Lock)}
+	
+	\begin{center}
+		\includegraphics[width=1\textwidth]{content/shared_resources/tsl.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема инверсии приоритета}
+
+	\begin{enumerate}
+		\item Процесс $H$ имеет высокий приоритет, а $L$ низкий.
+		\item $H$ преходит в режим активного ожидания. $\Rightarrow$ $L$ не получит времени, чтобы выполниться и $H$ никогда не выйдет из ожидания.
+	\end{enumerate}
+
+	Решение: системные вызовы $sleep$ и $wakeup$.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема производителя и потребителя}
+	
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{content/shared_resources/producer_consumer.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема производителя и потребителя. Семафоры}
+	
+	\begin{center}
+		\includegraphics[width=0.65\textwidth]{content/shared_resources/producer_consumer_semaphores.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема производителя и потребителя. Мониторы}
+	
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/shared_resources/producer_consumer_monitors.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема обедающих философов}
+
+	Модель синхронизации доступа нескольких процессов к нескольким ресурсам.
+	
+	\textbf{Решение:} массив семафоров по одному на философа, чтобы блокировать философов если их вилки заняты.
+	(Подробнее в Таненбаум Э. Современные операционные системы. 2-е изд. - СПб.: Питер, 2002. - с. 143)
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема читателей и писателей}
+
+	Модель синхронизации доступа к базе данных нескольких процессов.
+	
+	Условия:
+	
+	\begin{itemize}
+		\item Читать одновременно могут все.
+		\item Если кто-то пишет, то всем остальным доступ должен быть закрыт (даже для чтения).
+	\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема читателей и писателей}
+
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/shared_resources/readers_writers.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема спящего брадобрея}
+
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/shared_resources/sleeping_barber.png}	
+	\end{center}
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Проблема спящего брадобрея}
+
+	\begin{center}
+		\includegraphics[height=0.85\textheight]{content/shared_resources/sleeping_barber_listing.png}	
+	\end{center}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Планирование (диспечеризация, scheduling)}
+
+	Ресурсов мало, а пользователей этих ресурсов много.
+	
+	Один из алгоритмов планирования - FCFS (first come first served), FIFO (first in first out).
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм пекарни}
+	
+	$p$ - покупатели, сказавшие $please$.
+
+	$t$ - покупатели, сказавшие $thankyou$.
+
+	$r$ - покупатели, освободившие свои ресурсы.
+	
+	Инвариант пекарни - $r \leq t \leq p$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Алгоритм пекарни}
+
+	$BAKERY = B_{0,0,0}$	
+
+	$B_{p,t,r} = if \ 0 < r = t = p \ then$
+	
+	\quad \quad $BAKERY$
+	
+	\quad $else \ if \ R + r - t > 0 \wedge p - t > 0 \ then$
+	
+	\quad \quad \quad $t.thankyou \then B_{p,t+1,r}$
+	
+	\quad \quad $else$
+	
+	\quad \quad \quad $(p.please \then B_{p+1,t,r} \barchoice (\extchoice_{i<t}i.release \then B_{p,t,r+1}))$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Другие алгоритмы планирования}
+	
+	В зависимости от назначения системы:
+	
+\begin{itemize}
+	\item Пакетная обработка данных
+	\item Интерактивные системы
+	\item Системы реального времени
+\end{itemize}
+
+Подробнее в Таненбаум Э. Современные операционные системы. 2-е изд. - СПб.: Питер, 2002. - с. 157
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Hoare, C.A.R., Communicating Sequential Processes, 2004, http://www.usingcsp.com/cspbook.pdf \textbf{pp.181-225}
+	\item Таненбаум Э. Современные операционные системы. 2-е изд. - СПб.: Питер, 2002. - \textbf{сc.126-183}
+	\item Хоар, Ч., Взаимодействующие последовательные процессы- М.: Мир, 1989.
+\end{itemize}
+\end{slide}

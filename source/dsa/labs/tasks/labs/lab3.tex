@@ -1,0 +1,89 @@
+\begin{lesson}{ѕоиск по ключу}
+
+\setcounter{problem}{0}
+
+¬ данной работе вам требуетс€ реализовать абстрактный тип ``ќтображение''. ¬ качестве хранилища используйте сбалансированное дерево поиска (например, AVL дерево, 2-3 дерево, красно-черное дерево) или хеширование. — использованием этих абстрактных типов решить описанную ниже задачу.
+
+\textbf{»нтерфейс дл€ абстрактного типа ``ќтображение''} 
+\begin{lstlisting}
+interface Map<T> {
+	void set(Comparable key, T value);
+	T get(Comparable key);
+	boolean containsKey(Comparable key);
+}
+\end{lstlisting}
+
+\textbf{ѕример определени€ классов дл€ ``AVL-дерева''} 
+\begin{lstlisting}
+class AvlSearchTreeNode<T> {
+	public Comparable key;
+	public T value;
+	public AvlSearchTreeNode<T> left, right;
+	public int height;
+	public AvlSearchTreeNode(Comparable key, T value) { ... }
+	public void updateHeight() { ... }
+}
+	
+class AvlSearchTree<T> {
+	private AvlSearchTreeNode<T> root; 
+	public AvlSearchTree() { ... }
+	public void insert(Comparable key, T value) { ... }
+	public T find(Comparable key) { ... }
+	private int getHeightOfNode(AvlSearchTreeNode<T> node) { ... }
+	private AvlSearchTreeNode<T> rotateR(AvlSearchTreeNode<T> node) { ... }
+	private AvlSearchTreeNode<T> rotateL(AvlSearchTreeNode<T> node) { ... }
+	private AvlSearchTreeNode<T> rotateLR(AvlSearchTreeNode<T> node) { ... }
+	private AvlSearchTreeNode<T> rotateRL(AvlSearchTreeNode<T> node) { ... }
+	private AvlSearchTreeNode<T> insertNode(AvlSearchTreeNode<T> node, 
+			Comparable key, T value) { ... }
+	private AvlSearchTreeNode<T> findNode(AvlSearchTreeNode<T> node,
+			Comparable key) { ... }
+}
+\end{lstlisting}
+
+\input labs/analysis_task.tex
+
+\begin{problem}{ѕереводчик}{—тандартный поток ввода}{—тандартный поток вывода}{3 секунды}
+
+¬ам дан англо-американский словарь и текст на английском диалекте. “ребуетс€ вывести буквальный перевод данного текста на американский диалект. 
+
+\InputFile
+
+¬о входном файле в первой строке находитс€ число $N$ ($N \leq 10^5$). ¬ последующих $N$ строках записаны пары \textit{``английский вариант'' пробел ``американский вариант''}. ƒалее идет текст на английском диалекте (количество слов в тексте $\leq 10^5$ ), в котором оставлены только латинские символы, цифры, пробелы и символы перевода строки.
+
+\OutputFile
+
+¬ выходной файл необходимо вывести буквальный перевод данного текста на американский диалект. ≈сли в словаре есть точное соответствие английского слова американскому (учитыва€ регистр), то в перевод помещаем слово на американском диалекте, если такого слова нет, то оставл€ем на английском.
+
+\textbf{ѕримечание:} все слова в рамках одного диалекта различны, и при проверке выходного файла множественные пробелы и переводы строк отбрасываютс€.
+
+\Example
+
+\begin{example}
+\exmp{
+10
+the ze
+possible vozmozhno
+is si
+N T
+town gorod
+refrigerator BigWhiteBoxWithFood
+roads dorogi
+between megdu
+K N
+5 10
+The governments of Berland and Beerland announced 
+the possible consolidation coming soon Sounds unbelievable 
+but seems that the heads of the governments were able to 
+come to an agreement The only open issue is the old sore 
+spot with the road network Both countries have N probably 5 cities 
+the cities in each country are numbered from K to N 
+Some pairs of cities are connected by bidirectional roads 
+There are no roads between Berland and Beerland
+}{
+The governments of Berland and Beerland announced ze vozmozhno consolidation coming soon Sounds unbelievable but seems that ze heads of ze governments were able to come to an agreement The only open issue si ze old sore spot with ze road network Both countries have T probably 10 cities ze cities in each country are numbered from N to T Some pairs of cities are connected by bidirectional dorogi There are no dorogi megdu Berland and Beerland}%
+\end{example}
+
+\end{problem}
+
+\end{lesson}

@@ -1,0 +1,397 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Поиск. Бинарный поиск. Деревья поиска.}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Задача поиска} - очень широкая.
+	
+	\textbf{Дано:} множество элементов.
+	
+	\textbf{Найти:} подмножество по заданным критериям поиска.
+	
+	Что можно искать? Какие могут быть критерии поиска?
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Из чего складывается время работы поиска - $T(n)$}
+	
+\begin{itemize}
+	\item $T_{prepare}(n)$ - подготовительная часть - организация структуры данных для множества элементов
+	\item $T_{find}(n)$ - сам поиск - время работы алгоритма поиска
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Поиск по ключу}
+\begin{lstlisting}
+class SomeData<K,D> {
+	K key;
+	D data;
+}
+\end{lstlisting}
+	
+	\textbf{Дано:} множество элементов с заданным ключом. Условие: на множестве возможных ключей можно установить отношение порядка.
+	
+	\textbf{Найти:} подмножество элементов с ключом равным заданному.
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Наивный алгоритм}
+\begin{lstlisting}
+D find(K key) {
+	for (int i=0; i<length; i++) {
+		if (datas[i].key == key) {
+			return datas[i].data
+		}
+	}
+	return null;
+}
+\end{lstlisting}
+
+$T_{prepare}(n) = 0$
+
+$T_{find}(n) = \Theta(n)$
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарный поиск} - алгоритм поиска элемента $x$ в отсортированном списке $A$ длинны $n$.
+	
+\begin{enumerate}
+	\item Сравнить $x$ c $A\left[\left\lfloor n/2\right\rfloor\right]$, если $x$ = $A\left[\left\lfloor n/2\right\rfloor\right]$, то мы нашли.
+	\item Запустить рекурсию поиска с подсписком $\left[0,\left\lfloor n/2\right\rfloor - 1\right]$, если $x$ < $A\left[\left\lfloor n / 2\right\rfloor\right]$ иначе
+	с подсписком $\left[\left\lfloor n/2\right\rfloor + 1, n + 1\right]$
+\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарный поиск}
+	
+	A:
+\begin{tabular}[t]{| l | l | l |  l |  l |  l |  l |  l |  l |  l |}
+	\hline 
+	0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ 
+	\hline
+	1 & 2 & 32 & 47 & 63 & 64 & 86 & 89 & 91 & 95 \\ 
+	\hline
+\end{tabular}
+
+Найти $x=64$
+
+\begin{enumerate}
+	\item $\left[0, 9\right]: x > A[4] = 63$
+	\item $\left[5, 9\right]: x < A[7] = 89$
+	\item $\left[5, 6\right]: x < A[6] = 86$
+	\item $\left[5, 5\right]: x = A[5] = 64$ - \textbf{Успех}
+\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарный поиск}
+	
+	A:
+\begin{tabular}[t]{| l | l | l |  l |  l |  l |  l |  l |  l |  l |}
+	\hline 
+	0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\ 
+	\hline
+	1 & 2 & 32 & 47 & 63 & 64 & 86 & 89 & 91 & 95 \\ 
+	\hline
+\end{tabular}
+
+Найти $x=53$
+
+\begin{enumerate}
+	\item $\left[0, 9\right]: x < A[4] = 63$
+	\item $\left[0, 3\right]: x > A[2] = 32$
+	\item $\left[3, 3\right]: x \neq A[3] = 47$ - \textbf{Провал}
+\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарный поиск} - http://algolist.manual.ru
+	
+\begin{lstlisting}
+int function binarySearch (Array A, int lB, int uB, K key) {
+	while (true) {
+		M = (Lb + Ub)/2;
+		if (key < A[M]) then
+			Ub = M - 1;
+		else if (Key > A[M]) then
+			Lb = M + 1;
+		else
+			return M;
+		if (Lb > Ub) then
+			return -1;
+	}
+}
+\end{lstlisting}
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарный поиск} - Скорость работы
+
+\begin{itemize}
+	\item $T_{prepare}(n) = O(log(n))$ или $O(n)$ - зависит от способа сортировки - разберем позже.
+	\item $T_{find}(n) = O(log(n))$ - докажем сейчас.
+\end{itemize}
+	
+	$T(n) = T(n/2) + \Theta(1)$
+	
+	Используем основной метод: 
+	
+	$n^{log_{2}1} = n^0 = 1 = \Theta(1) = f(n) \Rightarrow$ Второй случай
+	
+	$\Rightarrow T(n) = \Theta(log(n))$
+
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Двоичное/бинарное дерево поиска} (англ. binary search tree, BST) - это двоичное дерево, для которого выполняются следующие дополнительные условия:
+	
+\begin{itemize}
+	\item У всех узлов левого поддерева произвольного узла $X$ значения ключей меньше, нежели значение ключа узла $X$.
+	\item У всех узлов правого поддерева произвольного узла $X$ значения ключей не меньше, нежели значение ключа узла $X$.
+	\item Оба поддерева - левое и правое, являются двоичными деревьями поиска.
+\end{itemize}
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска} - Пример
+	
+	\includegraphics[width=0.5\textwidth]{content/search/Binary_search_tree.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АТД Бинарное дерево поиска}
+\begin{lstlisting}
+class SearchTreeNode<T> {
+	public Comparable key;
+	public T value;
+}
+interface SearchTree<T> {
+	void insert(SearchTreeNode<T> node);
+	void remove(Comparable key);
+	SearchTreeNode<T> find(Comparable key);
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска} - Поиск
+\begin{lstlisting}
+public SearchTreeNode<T> find(Comparable key) {
+	findNode(root);
+}
+private SearchTreeNode<T> findNode(SearchTreeNode<T> node, 
+                                   Comparable key) {
+	if (null == node) return null;
+	int comparingResult = key.compareTo(node.key); 
+	if (0 == comparingResult) {
+		return node;
+	} else if (comparingResult < 0) {
+		return findNode(node.left, key);
+	} else {
+		return findNode(node.right, key);
+	}
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска} - Пример
+	
+	\includegraphics[width=0.5\textwidth]{content/search/Binary_search_tree.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска} - Вставка
+	
+\begin{enumerate}
+	\item Найти место для вставки, используя алгоритм поиска.
+	\item Вставить.
+\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска} - Скорость работы
+
+	$T_{insert}(n) = O(H(n))$	
+	
+	$T_{prepare}(n) = O(n \cdot H(n))$
+		
+	$T_{find}(n) = O(H(n))$	
+	
+	$H(n)$ - высота дерева. $H(n) = ?$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска}
+	
+	Высота дерева зависит от данных и последовательности заполнения им дерева.
+
+	Например: $H(n) = n$
+	
+	\includegraphics[width=0.3\textwidth]{content/search/bst_like_list.pdf}
+	
+	Тогда: $T_{prepare}(n) = O(n^2), T_{find}(n) = O(n)$	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Бинарное дерево поиска} - Примеры высот
+	
+\begin{itemize}
+	\item Для полного дерева - $H(n) = log_2(n)$
+	\item Для случайного дерева (равномерное распределение) - $H(n) = O(log(n))$ - доказательство, можно взять как доклад на семинар.
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Сбалансированные деревья поиска} - это деревья поиска, структура которых поддерживается приближенной к стурктуре полного дерева, и высота таких деревьев равна $O(log(n))$.
+	Методы поддержания баланса бинарных деревьев поиска:
+\begin{itemize}
+	\item АВЛ-дерево
+	\item 2-3-дерево (доклад на семинар)
+	\item Красно-черные деревья (доклад на семинар)
+	\item и другие (доклады на семинаре)
+\end{itemize}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево} - сбалансированное по высоте двоичное дерево поиска: для каждой его вершины высота её двух поддеревьев различается не более чем на 1. 
+	
+	Оно названо по первым буквам фамилий его изобретателей, Г. М. Адельсона-Вельского и Е. М. Ландиса, которые впервые предложили использовать АВЛ-деревья в 1962.
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример АВЛ-дерева}
+	
+	\includegraphics[width=0.5\textwidth]{content/search/avl_tree.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример не АВЛ-дерева}
+	
+	\includegraphics[width=0.5\textwidth]{content/search/Binary_search_tree.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево} - скорость работы.
+	
+	Найдем высоту дерева - $H(n)$.
+
+\begin{enumerate}
+	\item Пусть $N(h)$ - минимальное количество узлов для АВЛ-дерева высотой $h$.
+	\item $N(h) = 1 + N(h-1) + N(h-2) \Rightarrow N(h) > F_h$, где $F_h$ - $h$-е число Фиббоначи.
+	\item Известно, что $F_h = \frac{\varphi^h}{\sqrt{5}}$, тогда $N(h) > \frac{\varphi^h}{\sqrt{5}} \Rightarrow H(n) < log_{\varphi}(n\cdot\sqrt{5})$
+	\item $H(n) = O(log(n))$
+\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево} - скорость работы.
+
+	$T_{prepare}(n) = O(n \cdot log(n))$ 
+	
+	$T_{find}(n) = O(log(n))$	
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Механизм поддержания сбалансированности АВЛ-дерева} - изменение структуры дерева при добавлении и удалении элементов.
+	
+	Повороты:
+	
+\begin{itemize}
+	\item Левый
+	\item Правый
+	\item Лево-правый
+	\item Право-левый
+\end{itemize}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево: правый поворот}
+	
+	\includegraphics[width=0.7\textwidth]{content/search/avl_r.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево: правый поворот}
+\begin{lstlisting}
+private AvlSearchTreeNode<T> rotateR(AvlSearchTreeNode<T> node) {
+	AvlSearchTreeNode<T> result = node.left;
+	node.left = result.right;
+	result.right = node;
+	result.updateHeight();
+	node.updateHeight();
+	return result;
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево: право-левый поворот}
+	
+	\includegraphics[width=0.7\textwidth]{content/search/avl_rl.png}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{АВЛ-дерево: правый поворот}
+\begin{lstlisting}
+private AvlSearchTreeNode<T> rotateRL(AvlSearchTreeNode<T> node) {
+	node.right = rotateR(node.right);
+	return rotateL(node);
+}
+\end{lstlisting}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Ахо А., Хопкрофт Д., Ульман Д. Структуры данных и алгоритмы. - М. : Издательский дом ``Вильямс'', 2000. \textbf{сс.146-182}.
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.103-104, 316-364}.
+	\item Кнут Д, Искусство программирования, том 3. Сортировка и поиск, 2-е изд. - М. : Издательский дома ``Вильямс'', 2000. \textbf{сс.425-526}.
+\end{itemize}
+\end{slide}
+
+

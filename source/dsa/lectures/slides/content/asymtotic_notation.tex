@@ -1,0 +1,272 @@
+Хакасский государственный университет им. Н.Ф. Катанова\newline
+Структуры и алгоритмы обработки данных\newline
+\title{Лекция: Ассимтотическая нотация и рекурентные соотношения}
+\date{}
+\author{Николай Гребенщиков, www.grebenshikov.ru}
+\maketitle
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{O - нотация: ассимтотическая верхняя граница}	
+	
+	$f(n) = O(g(n)) \Rightarrow \\
+	(\exists c > 0, n_0 > 0 \Rightarrow 0 \leq f(n) \leq c \cdot g(n), n \geq n_0)$
+	
+	$O(g(n)) = \left\{f(n) : \exists c > 0, n_0 > 0 \Rightarrow 0 \leq f(n) \leq c \cdot g(n), n \geq n_0\right\}$
+	
+	Пример:
+	$2n^2=O(n^3) \Leftrightarrow 2n^2 \in O(n^3)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Использование в формулах}	
+	
+	$f(n) = n^3 + O(n^2) \Rightarrow (\exists h(n) \in O(n^2), f(n)=n^3+h(n))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{$\Omega$ - нотация: ассимтотическая нижняя граница}	
+	
+	$\Omega(g(n)) = \left\{f(n) : \exists c > 0, n_0 > 0 \Rightarrow 0 \leq c \cdot g(n) \leq f(n), n \geq n_0\right\}$
+	
+	Пример:
+	$\sqrt{n} = \Omega(lg(n))$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{$\Theta$ - нотация: ассимтотическое равенство}	
+	
+	$\Theta(g(n)) = \left\{\begin{array}{ll}
+		f(n) : \exists c_1 > 0, c_2 > 0, n_0 > 0 \Rightarrow \\
+		c_1 \cdot g(n) \leq f(n) \leq c_2 \cdot g(n), n \geq n_0 
+	\end{array}\right\}$
+	
+	$\Theta(g(n)) = O(g(n)) \cap \Omega(g(n))$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Решение рекурсий: метод подстановки}	
+		
+	$T(n)=4T(n/2) + n$	
+		
+	\begin{enumerate}
+		\item Догадаться (предположить) о решении
+		\item Проверить решение с помощью индукции
+		\item Найти и подставить константы
+	\end{enumerate}
+	
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Решение рекурсий: метод подстановки}	
+		
+	$T(n)=4T(n/2) + n$
+
+	Догадка: $T(n)=O(n^3)$
+	
+	Базис: $T(1) = \Theta(1) < c < c \cdot n^3 $
+
+	Посылка индукции: $T(k) \leq c \cdot k^3, k < n$
+\end{slide}
+	
+% ----------------------------------------------------------------
+\begin{slide}
+	Ход индукции: 
+	\begin{align*}
+		\displaystyle 
+		T(n) = 4T\left(\frac{n}{2}\right)+n \\
+			&\leq 4c\left(\frac{n}{2}\right)^3 + n \\
+			&= \frac{1}{2}cn^3 + n \\
+			&= cn^3 - (\frac{1}{2}cn^3 - n) \\
+			\leq cn^3, \frac{1}{2}cn3 - n \geq 0
+	\end{align*}
+	
+	Найдем константы: $(c \geq 1, n \geq 1)$
+		
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Догадка: $T(n)=O(n^2)$
+
+	Базис: $T(1) = \Theta(1) < c < c \cdot n^2$
+	
+	Посылка индукции: $T(k) \leq c \cdot k^2, k < n$
+\end{slide}
+	
+% ----------------------------------------------------------------
+\begin{slide}
+	Ход индукции: 
+	\begin{align*}
+		\displaystyle 
+		T(n) = 4T\left(\frac{n}{2}\right)+n \\
+			&\leq 4c\left(\frac{n}{2}\right)^2 + n \\
+			&= cn^2 + n \\
+			&= cn^2 - (-n)
+	\end{align*}
+	
+	Коллизия: нужно $-n >  0$
+		
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Посылка индукции: $T(k) \leq c_1 \cdot k^2 - с_2 \cdot k, k < n$
+	
+	Ход индукции: 
+	\begin{align*}
+		\displaystyle 
+		T(n) = 4T\left(\frac{n}{2}\right)+n \\
+			&= 4c_1\left(\frac{n}{2}\right)^2 - c_2\left(\frac{n}{2}\right) + n \\
+			&= c_1n^2 + (1 - 2c_2)n \\
+			&= c_1n^2 - 2c_2n - (-1 + c_2)n \\
+			&\leq c_1n^2 - c_2n, c_2 \geq  1 \\
+	\end{align*}
+
+	Базис: $T(1) = \Theta(1) < c_1 - c_2$
+		
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	Константы: 
+	
+	$(c_2 \geq 1)$
+
+	$(c_1 \geq c_2)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Дерево рекурсии}
+
+	$T(n) = T(n/4) + T(n/2) + n^2$
+	
+	\includegraphics[width=1\textwidth]{content/asymtotic_notation/tree1.pdf}
+
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\includegraphics[width=1\textwidth]{content/asymtotic_notation/tree2.pdf}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Cумма: по уровням}
+	
+	$(1 + 5/16 + 25/256 + \ldots + 5^k/16^k + \ldots)n^2 = ?$
+	
+	Решение: сравнение
+	\begin{align*}
+		(1 + 1/2 + 1/4 + 1/8 + 1/16 + \ldots) = \\ 
+		&=(1 + 1/2^k + \ldots) \\
+		&= 1.1111111(1) \\
+		&= 2
+	\end{align*}
+	\begin{align*}1/2^k > 5^k/16^k \Rightarrow \\
+		&\Rightarrow (1 + 5^k/16^k + \ldots)n^2 < 2n^2 \\
+		&\Rightarrow (1 + 5^k/16^k + \ldots)n^2 =O(n^2)
+	\end{align*}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Основной метод}
+	
+	применяется для $T(n)=aT(n/b)+f(n)$
+
+	$a \geq 1, b > 1, f(n) - ассимтотически положительная (f(n) > 0, n > n_0)$
+
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Основной метод}
+
+	\begin{enumerate}
+		\item Если $f(n) = O(n^{log_b a - \epsilon}), \epsilon > 0 \Rightarrow T(n) = \Theta(n^{log_b a})$
+		\item Если $f(n) = \Theta(n^{log_b a}) \Rightarrow T(n) = \Theta(n^{log_b a}log(n))$
+		\item Если 
+					
+					$f(n) = \Omega(n^{log_b a - \epsilon}), \epsilon > 0, af(n/b) \leq cf(n), c < 1, n > n_0 \Rightarrow \\
+					\Rightarrow T(n) = \Theta(f(n))$
+	\end{enumerate}
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример}
+
+	$T(n) = 4T(n/2) + n$
+	
+	$n^{log_b a} = n^{log_2 4} = n^2$ - 1-й случай
+	
+	Ответ: $T(n) = \Theta(n^2)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример}
+
+	$T(n) = 4T(n/2) + n^2$ - 2-й случай
+	
+	Ответ: $T(n) = \Theta(n^2 log(n))$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример}
+
+	$T(n) = 4T(n/2) + n^3$ - 3-й случай
+	
+	Ответ: $T(n) = \Theta(n^3)$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Пример}
+
+	$T(n) = 4T(n/2) + n^3/log(n)$
+	
+	Ответ: Основной метод не подходит - использовать другой метод.
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Основной метод: идея доказательства}
+	
+	\includegraphics[width=1\textwidth]{content/asymtotic_notation/master_method_prove.pdf}
+	
+	Итого: $\displaystyle \Theta(n^{log_b a}) + \sum_{j=0}^{log_b n-1}{a^j f(n/b^j)}$
+\end{slide}
+
+% ----------------------------------------------------------------
+\begin{slide}
+	\textbf{Основной метод: идея доказательства}
+	
+	\begin{enumerate}
+		\item Доминирует $f(n)$. Сумма уровня $\downarrow$.
+		\item Доминирует $\Theta(n^{log_b a})$. Сумма уровня $\uparrow$.
+		\item Нет доминанты. Суммы уровней примерно равны $f(n)$.
+	\end{enumerate}
+\end{slide}
+
+
+% ----------------------------------------------------------------
+\begin{slide}
+\textbf{Список литературы}
+\begin{itemize}
+	\item Кормен Т., Лейзерсон Ч., Ривест Р., Штайн К. Алгоритмы: построение и анализ, 2-е издание. - М. : Издательский дом ``Вильямс'', 2007. \textbf{сс.87-139}.
+\end{itemize}
+\end{slide}
+
